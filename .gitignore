@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+.venv/
+venv/
+
+# macOS
+.DS_Store
+
+# VS Code
+.vscode/
+
+# Secrets
+.env
+
+# Generated output
+output/
+
+# Python build
+build/
+dist/
+
+# Logs
+*.log
