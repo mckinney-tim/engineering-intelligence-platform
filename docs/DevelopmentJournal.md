@@ -25,3 +25,5 @@ Notes
  - Backend is considered stable.
 
  Next task: Connect Grafana to PostgreSQL and verify SELECT * FROM vw_issue_intelligence LIMIT 100 works.
+  - start docker with 'docker compose up -d'
+  
