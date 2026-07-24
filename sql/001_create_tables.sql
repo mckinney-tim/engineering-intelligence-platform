@@ -1,5 +1,5 @@
 -- ============================================================================
--- Engineering Intelligence Demo
+-- Engineering Intelligence Platform
 -- File: 001_create_tables.sql
 --
 -- Purpose:
@@ -7,23 +7,29 @@
 --     Platform proof of concept.
 --
 -- Author: Timothy McKinney
--- Version: 1.0
+-- Version: 1.1
 -- ============================================================================
 
 -- ============================================================================
 -- Drop Existing Tables
 -- ============================================================================
 
+DROP TABLE IF EXISTS issue_themes CASCADE;
 DROP TABLE IF EXISTS issue_skills CASCADE;
 DROP TABLE IF EXISTS issues CASCADE;
-DROP TABLE IF EXISTS skills CASCADE;
-DROP TABLE IF EXISTS themes CASCADE;
+
 DROP TABLE IF EXISTS projects CASCADE;
+
 DROP TABLE IF EXISTS customers CASCADE;
-DROP TABLE IF EXISTS products CASCADE;
 DROP TABLE IF EXISTS employees CASCADE;
+DROP TABLE IF EXISTS products CASCADE;
 DROP TABLE IF EXISTS teams CASCADE;
 DROP TABLE IF EXISTS departments CASCADE;
+
+DROP TABLE IF EXISTS themes CASCADE;
+DROP TABLE IF EXISTS skills CASCADE;
+DROP TABLE IF EXISTS labels CASCADE;
+DROP TABLE IF EXISTS technologies CASCADE;
 
 -- ============================================================================
 -- Organization
@@ -60,6 +66,7 @@ CREATE TABLE employees
     email              VARCHAR(150) UNIQUE,
 
     title              VARCHAR(100),
+    role_type          VARCHAR(50),
 
     department_id      INTEGER,
     team_id            INTEGER,
@@ -90,13 +97,19 @@ CREATE TABLE employees
 
 CREATE TABLE products
 (
-    product_id         SERIAL PRIMARY KEY,
+    product_id             SERIAL PRIMARY KEY,
 
-    product_name       VARCHAR(100) NOT NULL UNIQUE,
+    product_name           VARCHAR(100) NOT NULL UNIQUE,
 
-    description        TEXT,
+    description            TEXT,
 
-    owner_team_id      INTEGER,
+    owner_team_id          INTEGER,
+
+    product_manager_title  VARCHAR(100),
+
+    target_users           TEXT,
+
+    maturity               VARCHAR(50),
 
     CONSTRAINT fk_product_team
         FOREIGN KEY (owner_team_id)
@@ -107,51 +120,94 @@ CREATE TABLE customers
 (
     customer_id        SERIAL PRIMARY KEY,
 
-    customer_name      VARCHAR(150) NOT NULL,
+    customer_name      VARCHAR(150) NOT NULL UNIQUE,
 
     industry           VARCHAR(100),
 
     company_size       VARCHAR(50),
 
-    region             VARCHAR(100)
+    region             VARCHAR(100),
+
+    customer_tier      VARCHAR(25),
+
+    active             BOOLEAN NOT NULL DEFAULT TRUE,
+
+    onboarding_date    DATE DEFAULT CURRENT_DATE
 );
 
 CREATE TABLE projects
 (
-    project_id         SERIAL PRIMARY KEY,
+    project_id             SERIAL PRIMARY KEY,
 
-    project_name       VARCHAR(150) NOT NULL,
+    project_name           VARCHAR(150) NOT NULL,
 
-    product_id         INTEGER,
+    customer_id            INTEGER NOT NULL,
 
-    customer_id        INTEGER,
+    product_id             INTEGER NOT NULL,
 
-    status             VARCHAR(50),
+    owning_team_id         INTEGER NOT NULL,
 
-    start_date         DATE,
+    project_manager_id     INTEGER NOT NULL,
 
-    target_date        DATE,
+    status                 VARCHAR(50) NOT NULL,
+
+    priority               VARCHAR(25) NOT NULL,
+
+    start_date             DATE,
+
+    target_date            DATE,
+
+    source                 VARCHAR(20) DEFAULT 'WORKBOOK',
+
+    external_id            VARCHAR(100),
+
+    external_url           TEXT,
+
+    CONSTRAINT fk_project_customer
+        FOREIGN KEY (customer_id)
+        REFERENCES customers(customer_id),
 
     CONSTRAINT fk_project_product
         FOREIGN KEY (product_id)
         REFERENCES products(product_id),
 
-    CONSTRAINT fk_project_customer
-        FOREIGN KEY (customer_id)
-        REFERENCES customers(customer_id)
+    CONSTRAINT fk_project_team
+        FOREIGN KEY (owning_team_id)
+        REFERENCES teams(team_id),
+
+    CONSTRAINT fk_project_manager
+        FOREIGN KEY (project_manager_id)
+        REFERENCES employees(employee_id)
 );
 
 -- ============================================================================
 -- Reference Data
 -- ============================================================================
 
-CREATE TABLE themes
+CREATE TABLE technologies
 (
-    theme_id           SERIAL PRIMARY KEY,
+    technology_id      SERIAL PRIMARY KEY,
 
-    theme_name         VARCHAR(100) NOT NULL UNIQUE,
+    technology_name    VARCHAR(100) NOT NULL UNIQUE,
 
-    description        TEXT
+    category           VARCHAR(100),
+
+    description        TEXT,
+
+    active             CHAR(1) DEFAULT 'Y'
+);
+
+CREATE TABLE labels
+(
+    label_id           SERIAL PRIMARY KEY,
+
+    label_name         VARCHAR(100) NOT NULL UNIQUE,
+
+    category           VARCHAR(100),
+
+    description        TEXT,
+
+    active             CHAR(1) DEFAULT 'Y'
 );
 
 CREATE TABLE skills
@@ -162,7 +218,22 @@ CREATE TABLE skills
 
     category           VARCHAR(100),
 
-    keywords           TEXT
+    keywords           TEXT,
+
+    active             CHAR(1) DEFAULT 'Y'
+);
+
+CREATE TABLE themes
+(
+    theme_id           SERIAL PRIMARY KEY,
+
+    theme_name         VARCHAR(100) NOT NULL UNIQUE,
+
+    description        TEXT,
+
+    keywords           TEXT,
+
+    active             CHAR(1) DEFAULT 'Y'
 );
 
 -- ============================================================================
@@ -173,11 +244,13 @@ CREATE TABLE issues
 (
     issue_id           SERIAL PRIMARY KEY,
 
-    issue_key          VARCHAR(30) UNIQUE,
+    issue_key          VARCHAR(25) NOT NULL UNIQUE,
 
-    issue_number       INTEGER,
+    project_id         INTEGER NOT NULL,
 
-    title              TEXT NOT NULL,
+    assignee_id        INTEGER,
+
+    title              VARCHAR(255) NOT NULL,
 
     description        TEXT,
 
@@ -189,31 +262,19 @@ CREATE TABLE issues
 
     severity           VARCHAR(25),
 
-    status             VARCHAR(50),
+    status             VARCHAR(25),
 
-    epic               VARCHAR(100),
-
-    story_points       INTEGER,
-
-    estimated_hours    NUMERIC(6,2),
-
-    actual_hours       NUMERIC(6,2),
-
-    product_id         INTEGER,
-
-    project_id         INTEGER,
-
-    assignee_id        INTEGER,
-
-    theme_id           INTEGER,
+    weight             INTEGER,
 
     created_date       DATE,
 
     closed_date        DATE,
 
-    CONSTRAINT fk_issue_product
-        FOREIGN KEY (product_id)
-        REFERENCES products(product_id),
+    source             VARCHAR(20) DEFAULT 'WORKBOOK',
+
+    external_id        VARCHAR(100),
+
+    external_url       TEXT,
 
     CONSTRAINT fk_issue_project
         FOREIGN KEY (project_id)
@@ -221,15 +282,11 @@ CREATE TABLE issues
 
     CONSTRAINT fk_issue_assignee
         FOREIGN KEY (assignee_id)
-        REFERENCES employees(employee_id),
-
-    CONSTRAINT fk_issue_theme
-        FOREIGN KEY (theme_id)
-        REFERENCES themes(theme_id)
+        REFERENCES employees(employee_id)
 );
 
 -- ============================================================================
--- Derived Data
+-- Derived Intelligence
 -- ============================================================================
 
 CREATE TABLE issue_skills
@@ -240,9 +297,11 @@ CREATE TABLE issue_skills
 
     skill_id           INTEGER NOT NULL,
 
-    detection_method   VARCHAR(25) NOT NULL,
+    matched_keyword    VARCHAR(100),
 
-    confidence         NUMERIC(4,3),
+    detection_method   VARCHAR(25) DEFAULT 'Keyword',
+
+    confidence         NUMERIC(4,3) DEFAULT 1.000,
 
     CONSTRAINT fk_issue_skill_issue
         FOREIGN KEY (issue_id)
@@ -254,11 +313,48 @@ CREATE TABLE issue_skills
         REFERENCES skills(skill_id),
 
     CONSTRAINT uq_issue_skill
-        UNIQUE (issue_id, skill_id, detection_method)
+        UNIQUE
+        (
+            issue_id,
+            skill_id,
+            matched_keyword
+        )
+);
+
+CREATE TABLE issue_themes
+(
+    issue_theme_id     SERIAL PRIMARY KEY,
+
+    issue_id           INTEGER NOT NULL,
+
+    theme_id           INTEGER NOT NULL,
+
+    matched_keyword    VARCHAR(100),
+
+    detection_method   VARCHAR(25) DEFAULT 'Keyword',
+
+    confidence         NUMERIC(4,3) DEFAULT 1.000,
+
+    CONSTRAINT fk_issue_theme_issue
+        FOREIGN KEY (issue_id)
+        REFERENCES issues(issue_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_issue_theme_theme
+        FOREIGN KEY (theme_id)
+        REFERENCES themes(theme_id),
+
+    CONSTRAINT uq_issue_theme
+        UNIQUE
+        (
+            issue_id,
+            theme_id,
+            matched_keyword
+        )
 );
 
 -- ============================================================================
 -- Schema Created Successfully
 -- ============================================================================
 
-SELECT 'Engineering Intelligence Demo schema created successfully.' AS status;
+SELECT 'Engineering Intelligence Platform schema created successfully.' AS status;
