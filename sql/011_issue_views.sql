@@ -1,6 +1,8 @@
 -- =====================================================
 -- Engineering Intelligence Platform
--- Issue Detail Views
+-- Issue Detail View
+-- One row per issue
+-- Primary data source for Grafana dashboards
 -- =====================================================
 
 DROP VIEW IF EXISTS vw_issue_details;
@@ -9,6 +11,7 @@ CREATE VIEW vw_issue_details AS
 
 SELECT
 
+    -- Issue Information
     i.issue_id,
     i.issue_key,
     i.title,
@@ -18,16 +21,36 @@ SELECT
     i.severity,
     i.status,
     i.weight,
-    i.created_date,
-    i.closed_date,
+    i.labels,
 
+    -- Friendly Dates
+    i.created_date::date AS created_date,
+    i.closed_date::date AS closed_date,
+
+    -- Derived Metric
+    CASE
+        WHEN i.closed_date IS NULL
+            THEN CURRENT_DATE - i.created_date
+        ELSE i.closed_date - i.created_date
+    END AS issue_age_days,
+
+    -- Project Hierarchy
+    c.customer_name,
     p.project_name,
 
-    c.customer_name,
-
+    -- Organization
     t.team_name,
 
-    e.first_name || ' ' || e.last_name AS assignee
+    -- Assignee
+    CASE
+        WHEN e.employee_id IS NULL THEN 'Unassigned'
+        ELSE CONCAT(e.first_name, ' ', e.last_name)
+    END AS assignee,
+
+    -- Source Information
+    i.source,
+    i.external_id,
+    i.external_url
 
 FROM issues i
 

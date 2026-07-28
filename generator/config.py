@@ -20,3 +20,7 @@ SHEET_CUSTOMERS = "07_Customers"
 SHEET_SKILLS = "11_Skills"
 SHEET_THEMES = "12_Themes"
 SHEET_ISSUES = "13_Issues"
+
+# GitHub Configuration
+GITHUB_OWNER = "mckinney-tim"
+GITHUB_REPO = "engineering-intelligence-platform"
