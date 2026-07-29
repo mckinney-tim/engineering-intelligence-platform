@@ -5,10 +5,13 @@ Responsible for communicating with the GitHub REST API.
 """
 
 import os
+from datetime import datetime
+
 import requests
 from dotenv import load_dotenv
 
 from config import GITHUB_OWNER, GITHUB_REPO
+from github_models import GitHubIssue
 
 load_dotenv()
 
@@ -23,6 +26,17 @@ HEADERS = {
     "Authorization": f"Bearer {GITHUB_TOKEN}",
     "Accept": "application/vnd.github+json",
 }
+
+
+def _parse_datetime(value):
+    """
+    Convert GitHub datetime strings to Python datetime objects.
+    """
+
+    if value is None:
+        return None
+
+    return datetime.fromisoformat(value.replace("Z", "+00:00"))
 
 
 def get_issues(state="all"):
@@ -65,4 +79,27 @@ def get_issues(state="all"):
 
         page += 1
 
-    return issues
+    github_issues = []
+
+    for issue in issues:
+
+        # Ignore pull requests
+        if "pull_request" in issue:
+            continue
+
+        github_issues.append(
+            GitHubIssue(
+                number=issue["number"],
+                title=issue["title"],
+                body=issue["body"] or "",
+                state=issue["state"],
+                assignee=(issue["assignee"]["login"] if issue["assignee"] else None),
+                created_at=_parse_datetime(issue["created_at"]),
+                updated_at=_parse_datetime(issue["updated_at"]),
+                closed_at=_parse_datetime(issue["closed_at"]),
+                html_url=issue["html_url"],
+                labels=[label["name"] for label in issue["labels"]],
+            )
+        )
+
+    return github_issues

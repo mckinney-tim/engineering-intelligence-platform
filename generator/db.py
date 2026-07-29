@@ -1,12 +1,13 @@
 """
-Engineering Intelligence Demo
+Engineering Intelligence Platform
 
 Database connection utilities.
 """
 
+import os
+
 import psycopg2
 from dotenv import load_dotenv
-import os
 
 # Load environment variables
 load_dotenv()
@@ -73,6 +74,7 @@ def get_team_id(cursor, team_name):
 
 
 def get_employee_id(cursor, employee_number):
+
     cursor.execute(
         """
         SELECT employee_id
@@ -157,16 +159,106 @@ def get_project_id(cursor, project_name):
     result = cursor.fetchone()
 
     if result is None:
-        raise Exception(f"Project not found: {project_name}")
+        raise ValueError(f"Project not found: {project_name}")
 
     return result[0]
 
 
+def upsert_issue(conn, issue):
+    """
+    Insert or update an EngineeringIssue.
+
+    Returns:
+        issue_id (int)
+    """
+
+    with conn.cursor() as cursor:
+
+        project_id = get_project_id(
+            cursor,
+            issue.project_name,
+        )
+
+        cursor.execute(
+            """
+            INSERT INTO issues
+            (
+                issue_key,
+                project_id,
+                assignee_id,
+                title,
+                description,
+                labels,
+                issue_type,
+                priority,
+                severity,
+                status,
+                weight,
+                created_date,
+                closed_date,
+                source,
+                external_id,
+                external_url
+            )
+            VALUES
+            (
+                %s, %s, %s, %s, %s, %s, %s, %s,
+                %s, %s, %s, %s, %s, %s, %s, %s
+            )
+
+            ON CONFLICT (source, external_id)
+
+            DO UPDATE SET
+
+                issue_key = EXCLUDED.issue_key,
+                project_id = EXCLUDED.project_id,
+                assignee_id = EXCLUDED.assignee_id,
+                title = EXCLUDED.title,
+                description = EXCLUDED.description,
+                labels = EXCLUDED.labels,
+                issue_type = EXCLUDED.issue_type,
+                priority = EXCLUDED.priority,
+                severity = EXCLUDED.severity,
+                status = EXCLUDED.status,
+                weight = EXCLUDED.weight,
+                created_date = EXCLUDED.created_date,
+                closed_date = EXCLUDED.closed_date,
+                external_url = EXCLUDED.external_url
+
+            RETURNING issue_id
+            """,
+            (
+                issue.issue_key,
+                project_id,
+                None,  # assignee_id (future enhancement)
+                issue.title,
+                issue.description,
+                issue.labels,
+                issue.issue_type,
+                issue.priority,
+                issue.severity,
+                issue.status,
+                issue.weight,
+                issue.created_date,
+                issue.closed_date,
+                issue.source,
+                issue.external_id,
+                issue.external_url,
+            ),
+        )
+
+        issue_id = cursor.fetchone()[0]
+
+    conn.commit()
+
+    return issue_id
+
+
 if __name__ == "__main__":
+
     conn = get_connection()
 
     print("Connected!")
-
     print(conn.get_dsn_parameters())
 
     conn.close()

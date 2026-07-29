@@ -1,11 +1,11 @@
 """
 Synchronize GitHub Issues.
-
-Version 1:
-Reads issues from GitHub and displays a summary.
 """
 
+from db import get_connection, upsert_issue
 from github_client import get_issues
+from github_transformer import transform_issue
+from enrichment.service import enrich
 
 
 def main():
@@ -18,17 +18,43 @@ def main():
 
     issues = get_issues()
 
-    # Ignore pull requests
-    issues = [issue for issue in issues if "pull_request" not in issue]
+    conn = get_connection()
+
+    try:
+
+        print()
+
+        for github_issue in issues:
+
+            #
+            # Transform GitHub -> Engineering model
+            #
+            engineering_issue = transform_issue(github_issue)
+
+            print(f"Synchronizing {engineering_issue.issue_key}")
+
+            #
+            # Save or update the issue
+            #
+            issue_id = upsert_issue(
+                conn,
+                engineering_issue,
+            )
+
+            #
+            # Enrich the issue
+            #
+            enrich(
+                conn,
+                issue_id,
+            )
+
+    finally:
+
+        conn.close()
 
     print()
-    print(f"Retrieved {len(issues)} issues.\n")
-
-    for issue in issues:
-
-        print(f"#{issue['number']:>3} " f"{issue['state']:<6} " f"{issue['title']}")
-
-    print("\nSynchronization complete.")
+    print("Synchronization complete.")
 
 
 if __name__ == "__main__":

@@ -24,3 +24,6 @@ SHEET_ISSUES = "13_Issues"
 # GitHub Configuration
 GITHUB_OWNER = "mckinney-tim"
 GITHUB_REPO = "engineering-intelligence-platform"
+
+# Temporary default until we introduce repository mappings.
+DEFAULT_PROJECT_NAME = "Executive Engineering Dashboard"
