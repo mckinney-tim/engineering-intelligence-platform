@@ -9,6 +9,8 @@ import os
 import psycopg2
 from dotenv import load_dotenv
 
+from engineering_models import EngineeringIssue
+
 # Load environment variables
 load_dotenv()
 
@@ -252,6 +254,117 @@ def upsert_issue(conn, issue):
     conn.commit()
 
     return issue_id
+
+
+def get_issue(conn, issue_id) -> EngineeringIssue | None:
+    """
+    Load a fully populated EngineeringIssue from the database.
+    """
+
+    with conn.cursor() as cursor:
+
+        cursor.execute(
+            """
+            SELECT
+                i.source,
+                i.external_id,
+                i.external_url,
+                i.issue_key,
+                i.title,
+                i.description,
+                i.status,
+                i.created_date,
+                i.closed_date,
+                p.project_name,
+
+                CASE
+                    WHEN e.employee_id IS NULL THEN NULL
+                    ELSE e.first_name || ' ' || e.last_name
+                END AS assignee,
+
+                i.labels,
+                i.issue_type,
+                i.priority,
+                i.severity,
+                i.weight,
+                i.complexity,
+                i.risk,
+                i.executive_summary
+
+            FROM issues i
+
+            JOIN projects p
+                ON i.project_id = p.project_id
+
+            LEFT JOIN employees e
+                ON i.assignee_id = e.employee_id
+
+            WHERE i.issue_id = %s
+            """,
+            (issue_id,),
+        )
+
+        row = cursor.fetchone()
+
+    if row is None:
+        return None
+
+    labels = row[11]
+    if isinstance(labels, str):
+        labels = [label.strip() for label in labels.split(",") if label.strip()]
+    elif labels is None:
+        labels = []
+
+    return EngineeringIssue(
+        source=row[0],
+        external_id=row[1],
+        external_url=row[2],
+        issue_key=row[3],
+        title=row[4],
+        description=row[5],
+        status=row[6],
+        created_date=row[7],
+        closed_date=row[8],
+        project_name=row[9],
+        assignee=row[10],
+        labels=labels,
+        issue_type=row[12],
+        priority=row[13],
+        severity=row[14],
+        weight=row[15],
+        complexity=row[16],
+        risk=row[17],
+        executive_summary=row[18],
+        skills=[],
+        themes=[],
+    )
+
+
+def update_ai_analysis(conn, issue_id, analysis):
+    """
+    Persist AI-generated analysis for an issue.
+    """
+
+    with conn.cursor() as cursor:
+
+        cursor.execute(
+            """
+            UPDATE issues
+            SET
+                executive_summary = %s,
+                complexity = %s,
+                risk = %s
+            WHERE issue_id = %s
+            """,
+            (
+                analysis.executive_summary,
+                analysis.complexity,
+                analysis.risk.value,
+                issue_id,
+            ),
+        )
+
+    conn.commit()
 
 
 if __name__ == "__main__":

@@ -62,6 +62,8 @@ class EngineeringIssue:
 
     themes: list[str] = field(default_factory=list)
 
+    complexity: Optional[int] = None
+
     risk: Optional[str] = None
 
     executive_summary: Optional[str] = None

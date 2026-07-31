@@ -14,11 +14,11 @@ from enrichment.skills import enrich as enrich_skills
 
 def enrich(conn, issue_id):
     """
-    Execute all enrichment steps for a single issue.
+    Run all enrichment steps for an issue.
     """
 
     #
-    # Step 1 - Skill enrichment
+    # Detect skills
     #
     enrich_skills(
         conn,
@@ -26,7 +26,7 @@ def enrich(conn, issue_id):
     )
 
     #
-    # Step 2 - Load the enriched issue
+    # Load the issue
     #
     issue = get_issue(
         conn,
@@ -34,17 +34,17 @@ def enrich(conn, issue_id):
     )
 
     if issue is None:
-        raise ValueError(f"Issue {issue_id} not found.")
+        return
 
     #
-    # Step 3 - AI enrichment
+    # AI analysis
     #
     analysis = enrich_issue(
         issue,
     )
 
     #
-    # Step 4 - Persist AI results
+    # Save AI results
     #
     update_ai_analysis(
         conn,
@@ -52,8 +52,4 @@ def enrich(conn, issue_id):
         analysis,
     )
 
-    print(
-        f"✓ AI enriched {issue.issue_key} "
-        f"(Complexity={analysis.complexity}, "
-        f"Risk={analysis.risk.value})"
-    )
+    print(f"   AI: Complexity {analysis.complexity}, " f"Risk {analysis.risk.value}")

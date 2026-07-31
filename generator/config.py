@@ -4,7 +4,12 @@ Engineering Intelligence Demo
 Application configuration settings.
 """
 
+import os
+from dotenv import load_dotenv
 from pathlib import Path
+
+load_dotenv()
+
 
 # Project Paths
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -27,3 +32,8 @@ GITHUB_REPO = "engineering-intelligence-platform"
 
 # Temporary default until we introduce repository mappings.
 DEFAULT_PROJECT_NAME = "Executive Engineering Dashboard"
+
+# AI Configuration
+AI_PROVIDER = os.getenv("AI_PROVIDER", "mock")
+AI_MODEL = os.getenv("AI_MODEL", "gpt-4o")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
