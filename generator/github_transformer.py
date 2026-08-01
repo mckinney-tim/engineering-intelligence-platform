@@ -3,9 +3,9 @@ Transforms GitHub domain objects into Engineering Intelligence
 domain objects.
 """
 
-from engineering_models import EngineeringIssue
-from github_models import GitHubIssue
-from config import DEFAULT_PROJECT_NAME
+from generator.engineering_models import EngineeringIssue
+from generator.github_models import GitHubIssue
+from generator.config import DEFAULT_PROJECT_NAME
 
 
 def transform_issue(issue: GitHubIssue) -> EngineeringIssue:

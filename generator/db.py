@@ -9,7 +9,7 @@ import os
 import psycopg2
 from dotenv import load_dotenv
 
-from engineering_models import EngineeringIssue
+from generator.engineering_models import EngineeringIssue
 
 # Load environment variables
 load_dotenv()

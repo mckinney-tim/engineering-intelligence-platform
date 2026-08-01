@@ -1,55 +1,64 @@
 """
-Engineering Intelligence enrichment pipeline.
+AI enrichment service.
 """
 
-from ai.service import enrich_issue
+import json
 
-from db import (
-    get_issue,
-    update_ai_analysis,
+from generator.ai.client import complete
+from generator.ai.models import (
+    AIResponse,
+    AIIssueAnalysis,
+    RiskLevel,
 )
 
-from enrichment.skills import enrich as enrich_skills
+from generator.ai.prompts import build_issue_enrichment_prompt
+
+from generator.engineering_models import EngineeringIssue
 
 
-def enrich(conn, issue_id):
+def enrich_issue(issue: EngineeringIssue) -> AIIssueAnalysis:
     """
-    Run all enrichment steps for an issue.
+    Perform AI enrichment for a single EngineeringIssue.
     """
 
-    #
-    # Detect skills
-    #
-    enrich_skills(
-        conn,
-        issue_id,
+    prompt = build_issue_enrichment_prompt(issue)
+
+    response = complete(
+        system_prompt=prompt.system,
+        user_prompt=prompt.user,
     )
 
-    #
-    # Load the issue
-    #
-    issue = get_issue(
-        conn,
-        issue_id,
+    return _parse_analysis(response)
+
+
+def _parse_analysis(response: AIResponse) -> AIIssueAnalysis:
+    """
+    Convert the AI JSON response into an AIIssueAnalysis.
+    """
+
+    try:
+        result = json.loads(response.content)
+
+    except json.JSONDecodeError as ex:
+
+        raise ValueError("AI returned invalid JSON.") from ex
+
+    required_fields = (
+        "executive_summary",
+        "complexity",
+        "risk",
+        "reasoning",
     )
 
-    if issue is None:
-        return
+    for field in required_fields:
 
-    #
-    # AI analysis
-    #
-    analysis = enrich_issue(
-        issue,
+        if field not in result:
+
+            raise ValueError(f"Missing AI field: {field}")
+
+    return AIIssueAnalysis(
+        executive_summary=result["executive_summary"].strip(),
+        complexity=int(result["complexity"]),
+        risk=RiskLevel(result["risk"]),
+        reasoning=result["reasoning"].strip(),
     )
-
-    #
-    # Save AI results
-    #
-    update_ai_analysis(
-        conn,
-        issue_id,
-        analysis,
-    )
-
-    print(f"   AI: Complexity {analysis.complexity}, " f"Risk {analysis.risk.value}")

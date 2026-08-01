@@ -2,7 +2,7 @@
 Skill enrichment for Engineering Issues.
 """
 
-from db import get_connection
+from generator.db import get_connection
 
 # ------------------------------------------------------------------
 # Build Dictionary

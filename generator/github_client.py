@@ -10,8 +10,8 @@ from datetime import datetime
 import requests
 from dotenv import load_dotenv
 
-from config import GITHUB_OWNER, GITHUB_REPO
-from github_models import GitHubIssue
+from generator.config import GITHUB_OWNER, GITHUB_REPO
+from generator.github_models import GitHubIssue
 
 load_dotenv()
 

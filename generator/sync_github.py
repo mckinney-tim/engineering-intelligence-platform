@@ -2,10 +2,10 @@
 Synchronize GitHub Issues.
 """
 
-from db import get_connection, upsert_issue
-from github_client import get_issues
-from github_transformer import transform_issue
-from enrichment.service import enrich
+from generator.db import get_connection, upsert_issue
+from generator.github_client import get_issues
+from generator.github_transformer import transform_issue
+from generator.enrichment.service import enrich
 
 
 def main():
