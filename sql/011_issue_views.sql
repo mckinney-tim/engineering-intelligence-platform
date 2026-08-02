@@ -22,6 +22,9 @@ SELECT
     i.status,
     i.weight,
     i.labels,
+    i.complexity,
+    i.risk,
+    i.executive_summary,
 
     -- Friendly Dates
     i.created_date::date AS created_date,

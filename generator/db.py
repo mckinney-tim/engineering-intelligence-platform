@@ -261,6 +261,9 @@ def get_issue(conn, issue_id) -> EngineeringIssue | None:
     Load a fully populated EngineeringIssue from the database.
     """
 
+    #
+    # Load the issue
+    #
     with conn.cursor() as cursor:
 
         cursor.execute(
@@ -270,11 +273,14 @@ def get_issue(conn, issue_id) -> EngineeringIssue | None:
                 i.external_id,
                 i.external_url,
                 i.issue_key,
+
                 i.title,
                 i.description,
                 i.status,
+
                 i.created_date,
                 i.closed_date,
+
                 p.project_name,
 
                 CASE
@@ -286,6 +292,7 @@ def get_issue(conn, issue_id) -> EngineeringIssue | None:
                 i.issue_type,
                 i.priority,
                 i.severity,
+
                 i.weight,
                 i.complexity,
                 i.risk,
@@ -294,10 +301,10 @@ def get_issue(conn, issue_id) -> EngineeringIssue | None:
             FROM issues i
 
             JOIN projects p
-                ON i.project_id = p.project_id
+              ON i.project_id = p.project_id
 
             LEFT JOIN employees e
-                ON i.assignee_id = e.employee_id
+              ON i.assignee_id = e.employee_id
 
             WHERE i.issue_id = %s
             """,
@@ -309,11 +316,42 @@ def get_issue(conn, issue_id) -> EngineeringIssue | None:
     if row is None:
         return None
 
-    labels = row[11]
-    if isinstance(labels, str):
-        labels = [label.strip() for label in labels.split(",") if label.strip()]
-    elif labels is None:
-        labels = []
+    #
+    # Convert labels into a list
+    #
+    labels = []
+
+    if row[11]:
+        labels = [label.strip() for label in row[11].split(",") if label.strip()]
+
+    #
+    # Load detected skills
+    #
+    with conn.cursor() as cursor:
+
+        cursor.execute(
+            """
+            SELECT
+                s.skill_name
+            FROM issue_skills isk
+
+            JOIN skills s
+              ON isk.skill_id = s.skill_id
+
+            WHERE isk.issue_id = %s
+
+            ORDER BY s.skill_name
+            """,
+            (issue_id,),
+        )
+
+        skills = [r[0] for r in cursor.fetchall()]
+
+    #
+    # TODO
+    # Themes will be loaded here later.
+    #
+    themes = []
 
     return EngineeringIssue(
         source=row[0],
@@ -332,11 +370,11 @@ def get_issue(conn, issue_id) -> EngineeringIssue | None:
         priority=row[13],
         severity=row[14],
         weight=row[15],
+        skills=skills,
+        themes=themes,
         complexity=row[16],
         risk=row[17],
         executive_summary=row[18],
-        skills=[],
-        themes=[],
     )
 
 
@@ -365,6 +403,104 @@ def update_ai_analysis(conn, issue_id, analysis):
         )
 
     conn.commit()
+
+
+def get_all_github_issues(conn):
+    """
+    Returns all GitHub issues as EngineeringIssue objects.
+    """
+
+    with conn.cursor() as cursor:
+
+        cursor.execute("""
+            SELECT issue_id
+            FROM issues
+            WHERE source = 'GITHUB'
+            ORDER BY issue_key
+            """)
+
+        issue_ids = [row[0] for row in cursor.fetchall()]
+
+    issues = []
+
+    for issue_id in issue_ids:
+
+        issue = get_issue(
+            conn,
+            issue_id,
+        )
+
+        if issue:
+            issues.append(issue)
+
+    return issues
+
+
+def get_issues(
+    conn,
+    customer: list[str] | None = None,
+    project: list[str] | None = None,
+    status: list[str] | None = None,
+    priority: list[str] | None = None,
+    start_date: str | None = None,
+    end_date: str | None = None,
+    limit: int = 100,
+):
+    """
+    Returns EngineeringIssue objects matching optional filters.
+    """
+
+    sql = """
+        SELECT issue_id
+        FROM vw_issue_details
+        WHERE 1 = 1
+    """
+
+    params = []
+
+    if customer:
+        sql += " AND customer_name = ANY(%s)"
+        params.append(customer)
+
+    if project:
+        sql += " AND project_name = ANY(%s)"
+        params.append(project)
+
+    if status:
+        sql += " AND status = ANY(%s)"
+        params.append(status)
+
+    if priority:
+        sql += " AND priority = ANY(%s)"
+        params.append(priority)
+
+    if start_date:
+        sql += " AND created_date >= %s"
+        params.append(start_date)
+
+    if end_date:
+        sql += " AND created_date <= %s"
+        params.append(end_date)
+
+    sql += """
+        ORDER BY created_date DESC
+        LIMIT %s
+    """
+
+    params.append(limit)
+
+    with conn.cursor() as cursor:
+        cursor.execute(sql, params)
+        ids = [row[0] for row in cursor.fetchall()]
+
+    issues = []
+
+    for issue_id in ids:
+        issue = get_issue(conn, issue_id)
+        if issue:
+            issues.append(issue)
+
+    return issues
 
 
 if __name__ == "__main__":

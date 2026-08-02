@@ -58,11 +58,11 @@ class EngineeringIssue:
 
     weight: Optional[int] = None
 
+    complexity: Optional[int] = None
+
     skills: list[str] = field(default_factory=list)
 
     themes: list[str] = field(default_factory=list)
-
-    complexity: Optional[int] = None
 
     risk: Optional[str] = None
 
