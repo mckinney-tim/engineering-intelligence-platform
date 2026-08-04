@@ -234,10 +234,22 @@ This rebuilds the Engineering Intelligence database from the workbook.
 ### 4. Synchronize GitHub
 
 ```bash
-python generator/sync_github.py
+python -m generator.sync_github
 ```
 
 Imports GitHub Issues and automatically enriches them with AI.
+
+---
+
+### 4b. Batch-enrich remaining issues (optional)
+
+```bash
+python tools/enrich_issues.py
+```
+
+Runs AI enrichment (complexity, risk, executive summary) for any issue
+that does not have it yet. Resume-safe: re-run after interruptions or
+rate limits and it picks up where it left off.
 
 ---
 
@@ -254,6 +266,25 @@ uvicorn generator.api:app --reload
 ```bash
 docker compose up grafana
 ```
+
+---
+
+### Utilities
+
+| Command | Purpose |
+|---|---|
+| `python -m generator.apply_schema` | (Re)creates the full database schema from `sql/` |
+| `python tools/generate_issues.py` | Appends realistic synthetic issues to the design workbook |
+| `python tools/enrich_issues.py` | Batch AI enrichment for issues missing scores |
+
+### AI Analyst Panel
+
+The Engineering Intelligence AI dashboard embeds an interactive analyst
+(served by the API at `/panel`) as an iframe. It inherits the dashboard's
+filters and time range from the URL, offers preconfigured analyses
+(bottlenecks, risk, skill gaps, workload, executive briefing, customer
+health), accepts free-form questions, and streams grounded markdown
+answers that cite issue keys.
 
 ---
 

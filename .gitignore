@@ -25,3 +25,10 @@ dist/
 
 # Logs
 *.log
+
+# Claude Code local config (session/machine-specific, not needed to recreate the project)
+.claude/
+
+# Personal demo prep (recording script and post copy, not part of the platform)
+docs/demo/demo_script.md
+docs/demo/linkedin_post.md

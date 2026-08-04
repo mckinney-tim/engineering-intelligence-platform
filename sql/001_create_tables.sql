@@ -276,6 +276,16 @@ CREATE TABLE issues
 
     external_url       TEXT,
 
+    -- AI enrichment
+    complexity         INTEGER,
+
+    risk               VARCHAR(25),
+
+    executive_summary  TEXT,
+
+    CONSTRAINT uq_issue_source_external
+        UNIQUE (source, external_id),
+
     CONSTRAINT fk_issue_project
         FOREIGN KEY (project_id)
         REFERENCES projects(project_id),

@@ -1,7 +1,7 @@
+from generator.apply_schema import apply_schema
 from generator.load_departments import load_departments
 from generator.load_teams import load_teams
 from generator.load_products import load_products
-from generator.reset_database import reset_database
 from generator.load_customers import load_customers
 from generator.load_projects import load_projects
 from generator.load_issues import load_issues
@@ -17,7 +17,7 @@ from generator.load_employees import (
 def main():
     print("Engineering Intelligence Demo")
     print("-----------------------------")
-    reset_database()
+    apply_schema()
 
     load_departments()
     load_teams()

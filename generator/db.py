@@ -348,10 +348,27 @@ def get_issue(conn, issue_id) -> EngineeringIssue | None:
         skills = [r[0] for r in cursor.fetchall()]
 
     #
-    # TODO
-    # Themes will be loaded here later.
+    # Load detected themes
     #
-    themes = []
+    with conn.cursor() as cursor:
+
+        cursor.execute(
+            """
+            SELECT
+                t.theme_name
+            FROM issue_themes ith
+
+            JOIN themes t
+              ON ith.theme_id = t.theme_id
+
+            WHERE ith.issue_id = %s
+
+            ORDER BY t.theme_name
+            """,
+            (issue_id,),
+        )
+
+        themes = [r[0] for r in cursor.fetchall()]
 
     return EngineeringIssue(
         source=row[0],

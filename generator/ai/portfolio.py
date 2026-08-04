@@ -4,8 +4,65 @@ Portfolio-level AI analysis.
 
 import json
 
+from datetime import date
+
 from generator.ai.client import complete
 from generator.ai.portfolio_models import PortfolioAnalysis
+
+
+MAX_DESCRIPTION_CHARS = 400
+
+
+def _serialize_issue(issue) -> str:
+    """
+    Compact one issue into the LLM context. Dates, weight, and AI
+    scores give the model real signal for bottleneck and cycle-time
+    observations; descriptions are truncated to control token cost.
+    """
+
+    description = (issue.description or "").strip()
+
+    if len(description) > MAX_DESCRIPTION_CHARS:
+        description = description[:MAX_DESCRIPTION_CHARS] + "..."
+
+    age_days = None
+
+    if issue.created_date:
+
+        end = issue.closed_date or date.today()
+
+        age_days = (end - issue.created_date).days
+
+    lines = [
+        f"Issue: {issue.issue_key}",
+        f"Title: {issue.title}",
+        f"Project: {issue.project_name}",
+        f"Assignee: {issue.assignee or 'Unassigned'}",
+        f"Type: {issue.issue_type or 'Unknown'}",
+        f"Status: {issue.status}",
+        f"Priority: {issue.priority}",
+        f"Severity: {issue.severity or 'Unknown'}",
+        f"Weight: {issue.weight if issue.weight is not None else 'Unknown'}",
+        f"Created: {issue.created_date}",
+        f"Closed: {issue.closed_date or 'Still open'}",
+        f"Age (days): {age_days if age_days is not None else 'Unknown'}",
+    ]
+
+    if issue.complexity is not None:
+        lines.append(f"AI Complexity (1-10): {issue.complexity}")
+
+    if issue.risk:
+        lines.append(f"AI Risk: {issue.risk}")
+
+    if issue.skills:
+        lines.append(f"Skills: {', '.join(issue.skills)}")
+
+    if issue.themes:
+        lines.append(f"Themes: {', '.join(issue.themes)}")
+
+    lines.append(f"Description:\n{description}")
+
+    return "\n".join(lines)
 
 
 def analyze_portfolio(issues) -> PortfolioAnalysis:
@@ -79,26 +136,9 @@ Do not fabricate information that is not supported by the supplied engineering i
 Base all conclusions on the supplied issues.
 """.strip()
 
-    issue_text = []
-
-    for issue in issues:
-
-        issue_text.append(f"""
-Issue: {issue.issue_key}
-
-Title: {issue.title}
-
-Status: {issue.status}
-
-Priority: {issue.priority}
-
-Skills: {", ".join(issue.skills)}
-
-Description:
-{issue.description}
-""".strip())
-
-    user_prompt = "\n\n----------------------\n\n".join(issue_text)
+    user_prompt = "\n\n----------------------\n\n".join(
+        _serialize_issue(issue) for issue in issues
+    )
 
     response = complete(
         system_prompt=system_prompt,

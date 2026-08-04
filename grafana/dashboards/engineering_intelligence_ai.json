@@ -1,1373 +1,1422 @@
 {
-    "annotations": [
-        {
-            "kind": "AnnotationQuery",
-            "spec": {
-                "builtIn": true,
-                "enable": true,
-                "hide": true,
-                "iconColor": "rgba(0, 211, 255, 1)",
-                "name": "Annotations & Alerts",
-                "query": {
+  "annotations": [
+    {
+      "kind": "AnnotationQuery",
+      "spec": {
+        "builtIn": true,
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "query": {
+          "datasource": {
+            "name": "-- Grafana --"
+          },
+          "group": "grafana",
+          "kind": "DataQuery",
+          "spec": {},
+          "version": "v0"
+        }
+      }
+    }
+  ],
+  "cursorSync": "Off",
+  "editable": true,
+  "elements": {
+    "panel-1": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
                     "datasource": {
-                        "name": "-- Grafana --"
+                      "name": "bftw1n8h0ledcf"
                     },
-                    "group": "grafana",
+                    "group": "grafana-postgresql-datasource",
                     "kind": "DataQuery",
-                    "spec": {},
+                    "spec": {
+                      "columns": [
+                        {
+                          "selector": "executive_summary",
+                          "text": "Executive Summary",
+                          "type": "string"
+                        }
+                      ],
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "jq-backend",
+                      "root_selector": ".",
+                      "source": "url",
+                      "type": "json",
+                      "url": "http://host.docker.internal:8000/api/v1/portfolio?customer=${customer}&project=${project}&status=${status}&priority=${priority}&start_date=${__from:date:YYYY-MM-DD}&end_date=${__to:date:YYYY-MM-DD}",
+                      "url_options": {
+                        "data": "",
+                        "method": "GET"
+                      }
+                    },
                     "version": "v0"
+                  },
+                  "refId": "A"
                 }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "",
+        "id": 1,
+        "links": [],
+        "title": "Executive Summary",
+        "vizConfig": {
+          "group": "table",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "footer": {
+                    "reducers": []
+                  },
+                  "inspect": false,
+                  "wrapText": true
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "options": {
+              "cellHeight": "sm",
+              "showHeader": false,
+              "sortBy": [
+                {
+                  "desc": true,
+                  "displayName": "executive_summary"
+                }
+              ]
             }
+          },
+          "version": "13.1.1"
         }
-    ],
-    "cursorSync": "Off",
-    "editable": true,
-    "elements": {
-        "panel-1": {
-            "kind": "Panel",
-            "spec": {
-                "data": {
-                    "kind": "QueryGroup",
-                    "spec": {
-                        "queries": [
-                            {
-                                "kind": "PanelQuery",
-                                "spec": {
-                                    "hidden": false,
-                                    "query": {
-                                        "datasource": {
-                                            "name": "bftw1n8h0ledcf"
-                                        },
-                                        "group": "grafana-postgresql-datasource",
-                                        "kind": "DataQuery",
-                                        "spec": {
-                                            "columns": [
-                                                {
-                                                    "selector": "executive_summary",
-                                                    "text": "Executive Summary",
-                                                    "type": "string"
-                                                }
-                                            ],
-                                            "filters": [],
-                                            "format": "table",
-                                            "global_query_id": "",
-                                            "parser": "jq-backend",
-                                            "root_selector": ".",
-                                            "source": "url",
-                                            "type": "json",
-                                            "url": "http://host.docker.internal:8000/api/v1/portfolio?customer=${customer}&project=${project}&status=${status}&priority=${priority}&start_date=${__from:date:YYYY-MM-DD}&end_date=${__to:date:YYYY-MM-DD}",
-                                            "url_options": {
-                                                "data": "",
-                                                "method": "GET"
-                                            }
-                                        },
-                                        "version": "v0"
-                                    },
-                                    "refId": "A"
-                                }
-                            }
-                        ],
-                        "queryOptions": {},
-                        "transformations": []
-                    }
-                },
-                "description": "",
-                "id": 1,
-                "links": [],
-                "title": "Executive Summary",
-                "vizConfig": {
-                    "group": "table",
-                    "kind": "VizConfig",
-                    "spec": {
-                        "fieldConfig": {
-                            "defaults": {
-                                "color": {
-                                    "mode": "thresholds"
-                                },
-                                "custom": {
-                                    "align": "auto",
-                                    "cellOptions": {
-                                        "type": "auto"
-                                    },
-                                    "footer": {
-                                        "reducers": []
-                                    },
-                                    "inspect": false,
-                                    "wrapText": true
-                                },
-                                "thresholds": {
-                                    "mode": "absolute",
-                                    "steps": [
-                                        {
-                                            "color": "green",
-                                            "value": 0
-                                        },
-                                        {
-                                            "color": "red",
-                                            "value": 80
-                                        }
-                                    ]
-                                }
-                            },
-                            "overrides": []
-                        },
-                        "options": {
-                            "cellHeight": "sm",
-                            "showHeader": false,
-                            "sortBy": [
-                                {
-                                    "desc": true,
-                                    "displayName": "executive_summary"
-                                }
-                            ]
-                        }
-                    },
-                    "version": "13.1.1"
-                }
-            }
-        },
-        "panel-2": {
-            "kind": "Panel",
-            "spec": {
-                "data": {
-                    "kind": "QueryGroup",
-                    "spec": {
-                        "queries": [
-                            {
-                                "kind": "PanelQuery",
-                                "spec": {
-                                    "hidden": false,
-                                    "query": {
-                                        "datasource": {
-                                            "name": "bftw1n8h0ledcf"
-                                        },
-                                        "group": "yesoreyeram-infinity-datasource",
-                                        "kind": "DataQuery",
-                                        "spec": {
-                                            "columns": [
-                                                {
-                                                    "selector": "top_risks_text",
-                                                    "text": "Top Risks",
-                                                    "type": "string"
-                                                }
-                                            ],
-                                            "filters": [],
-                                            "format": "table",
-                                            "global_query_id": "",
-                                            "parser": "jq-backend",
-                                            "root_selector": ".",
-                                            "source": "url",
-                                            "type": "json",
-                                            "url": "http://host.docker.internal:8000/api/v1/portfolio?customer=${customer}&project=${project}&status=${status}&priority=${priority}&start_date=${__from:date:YYYY-MM-DD}&end_date=${__to:date:YYYY-MM-DD}",
-                                            "url_options": {
-                                                "data": "",
-                                                "method": "GET"
-                                            }
-                                        },
-                                        "version": "v0"
-                                    },
-                                    "refId": "A"
-                                }
-                            }
-                        ],
-                        "queryOptions": {},
-                        "transformations": [
-                            {
-                                "group": "organize",
-                                "kind": "Transformation",
-                                "spec": {
-                                    "options": {
-                                        "excludeByName": {
-                                            "bottlenecks": true,
-                                            "bottlenecks_text": true,
-                                            "emerging_skills": true,
-                                            "emerging_skills_text": true,
-                                            "executive_summary": true,
-                                            "overall_risk": true,
-                                            "portfolio_health": true,
-                                            "recommendations": true,
-                                            "recommendations_text": true,
-                                            "top_risks": false,
-                                            "top_risks_text": true
-                                        },
-                                        "includeByName": {},
-                                        "indexByName": {},
-                                        "renameByName": {}
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                },
-                "description": "",
-                "id": 2,
-                "links": [],
-                "title": "Top Risks",
-                "vizConfig": {
-                    "group": "table",
-                    "kind": "VizConfig",
-                    "spec": {
-                        "fieldConfig": {
-                            "defaults": {
-                                "color": {
-                                    "mode": "thresholds"
-                                },
-                                "custom": {
-                                    "align": "auto",
-                                    "cellOptions": {
-                                        "type": "auto"
-                                    },
-                                    "footer": {
-                                        "reducers": []
-                                    },
-                                    "inspect": false,
-                                    "wrapText": true
-                                },
-                                "thresholds": {
-                                    "mode": "absolute",
-                                    "steps": [
-                                        {
-                                            "color": "green",
-                                            "value": 0
-                                        },
-                                        {
-                                            "color": "red",
-                                            "value": 80
-                                        }
-                                    ]
-                                }
-                            },
-                            "overrides": []
-                        },
-                        "options": {
-                            "cellHeight": "sm",
-                            "showHeader": false,
-                            "sortBy": [
-                                {
-                                    "desc": true,
-                                    "displayName": "executive_summary"
-                                }
-                            ]
-                        }
-                    },
-                    "version": "13.1.1"
-                }
-            }
-        },
-        "panel-3": {
-            "kind": "Panel",
-            "spec": {
-                "data": {
-                    "kind": "QueryGroup",
-                    "spec": {
-                        "queries": [
-                            {
-                                "kind": "PanelQuery",
-                                "spec": {
-                                    "hidden": false,
-                                    "query": {
-                                        "datasource": {
-                                            "name": "bftw1n8h0ledcf"
-                                        },
-                                        "group": "yesoreyeram-infinity-datasource",
-                                        "kind": "DataQuery",
-                                        "spec": {
-                                            "columns": [
-                                                {
-                                                    "selector": "recommendations_text",
-                                                    "text": "Recommendations",
-                                                    "type": "string"
-                                                }
-                                            ],
-                                            "filters": [],
-                                            "format": "table",
-                                            "global_query_id": "",
-                                            "parser": "jq-backend",
-                                            "root_selector": ".",
-                                            "source": "url",
-                                            "type": "json",
-                                            "url": "http://host.docker.internal:8000/api/v1/portfolio?customer=${customer}&project=${project}&status=${status}&priority=${priority}&start_date=${__from:date:YYYY-MM-DD}&end_date=${__to:date:YYYY-MM-DD}",
-                                            "url_options": {
-                                                "data": "",
-                                                "method": "GET"
-                                            }
-                                        },
-                                        "version": "v0"
-                                    },
-                                    "refId": "A"
-                                }
-                            }
-                        ],
-                        "queryOptions": {},
-                        "transformations": [
-                            {
-                                "group": "organize",
-                                "kind": "Transformation",
-                                "spec": {
-                                    "options": {
-                                        "excludeByName": {
-                                            "bottlenecks": true,
-                                            "bottlenecks_text": true,
-                                            "emerging_skills": true,
-                                            "emerging_skills_text": true,
-                                            "executive_summary": true,
-                                            "overall_risk": true,
-                                            "portfolio_health": true,
-                                            "recommendations": false,
-                                            "recommendations_text": true,
-                                            "top_risks": true,
-                                            "top_risks_text": true
-                                        },
-                                        "includeByName": {},
-                                        "indexByName": {},
-                                        "renameByName": {}
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                },
-                "description": "",
-                "id": 3,
-                "links": [],
-                "title": "Recommendations",
-                "vizConfig": {
-                    "group": "table",
-                    "kind": "VizConfig",
-                    "spec": {
-                        "fieldConfig": {
-                            "defaults": {
-                                "color": {
-                                    "mode": "thresholds"
-                                },
-                                "custom": {
-                                    "align": "auto",
-                                    "cellOptions": {
-                                        "type": "auto"
-                                    },
-                                    "footer": {
-                                        "reducers": []
-                                    },
-                                    "inspect": false,
-                                    "wrapText": true
-                                },
-                                "thresholds": {
-                                    "mode": "absolute",
-                                    "steps": [
-                                        {
-                                            "color": "green",
-                                            "value": 0
-                                        },
-                                        {
-                                            "color": "red",
-                                            "value": 80
-                                        }
-                                    ]
-                                }
-                            },
-                            "overrides": []
-                        },
-                        "options": {
-                            "cellHeight": "sm",
-                            "showHeader": false,
-                            "sortBy": [
-                                {
-                                    "desc": true,
-                                    "displayName": "executive_summary"
-                                }
-                            ]
-                        }
-                    },
-                    "version": "13.1.1"
-                }
-            }
-        },
-        "panel-4": {
-            "kind": "Panel",
-            "spec": {
-                "data": {
-                    "kind": "QueryGroup",
-                    "spec": {
-                        "queries": [
-                            {
-                                "kind": "PanelQuery",
-                                "spec": {
-                                    "hidden": false,
-                                    "query": {
-                                        "datasource": {
-                                            "name": "bftw1n8h0ledcf"
-                                        },
-                                        "group": "yesoreyeram-infinity-datasource",
-                                        "kind": "DataQuery",
-                                        "spec": {
-                                            "columns": [
-                                                {
-                                                    "selector": "emerging_skills_text",
-                                                    "text": "Emerging Skills",
-                                                    "type": "string"
-                                                }
-                                            ],
-                                            "filters": [],
-                                            "format": "table",
-                                            "global_query_id": "",
-                                            "parser": "jq-backend",
-                                            "root_selector": ".",
-                                            "source": "url",
-                                            "type": "json",
-                                            "url": "http://host.docker.internal:8000/api/v1/portfolio?customer=${customer}&project=${project}&status=${status}&priority=${priority}&start_date=${__from:date:YYYY-MM-DD}&end_date=${__to:date:YYYY-MM-DD}",
-                                            "url_options": {
-                                                "data": "",
-                                                "method": "GET"
-                                            }
-                                        },
-                                        "version": "v0"
-                                    },
-                                    "refId": "A"
-                                }
-                            }
-                        ],
-                        "queryOptions": {},
-                        "transformations": [
-                            {
-                                "group": "organize",
-                                "kind": "Transformation",
-                                "spec": {
-                                    "options": {
-                                        "excludeByName": {
-                                            "bottlenecks": true,
-                                            "bottlenecks_text": true,
-                                            "emerging_skills": false,
-                                            "emerging_skills_text": true,
-                                            "executive_summary": true,
-                                            "overall_risk": true,
-                                            "portfolio_health": true,
-                                            "recommendations": true,
-                                            "recommendations_text": true,
-                                            "top_risks": true,
-                                            "top_risks_text": true
-                                        },
-                                        "includeByName": {},
-                                        "indexByName": {},
-                                        "renameByName": {}
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                },
-                "description": "",
-                "id": 4,
-                "links": [],
-                "title": "Emerging Skills",
-                "vizConfig": {
-                    "group": "table",
-                    "kind": "VizConfig",
-                    "spec": {
-                        "fieldConfig": {
-                            "defaults": {
-                                "color": {
-                                    "mode": "thresholds"
-                                },
-                                "custom": {
-                                    "align": "auto",
-                                    "cellOptions": {
-                                        "type": "auto"
-                                    },
-                                    "footer": {
-                                        "reducers": []
-                                    },
-                                    "inspect": false,
-                                    "wrapText": true
-                                },
-                                "thresholds": {
-                                    "mode": "absolute",
-                                    "steps": [
-                                        {
-                                            "color": "green",
-                                            "value": 0
-                                        },
-                                        {
-                                            "color": "red",
-                                            "value": 80
-                                        }
-                                    ]
-                                }
-                            },
-                            "overrides": []
-                        },
-                        "options": {
-                            "cellHeight": "sm",
-                            "showHeader": false,
-                            "sortBy": [
-                                {
-                                    "desc": true,
-                                    "displayName": "executive_summary"
-                                }
-                            ]
-                        }
-                    },
-                    "version": "13.1.1"
-                }
-            }
-        },
-        "panel-5": {
-            "kind": "Panel",
-            "spec": {
-                "data": {
-                    "kind": "QueryGroup",
-                    "spec": {
-                        "queries": [
-                            {
-                                "kind": "PanelQuery",
-                                "spec": {
-                                    "hidden": false,
-                                    "query": {
-                                        "datasource": {
-                                            "name": "bftw1n8h0ledcf"
-                                        },
-                                        "group": "yesoreyeram-infinity-datasource",
-                                        "kind": "DataQuery",
-                                        "spec": {
-                                            "columns": [
-                                                {
-                                                    "selector": "bottlenecks_text",
-                                                    "text": "Bottlenecks",
-                                                    "type": "string"
-                                                }
-                                            ],
-                                            "filters": [],
-                                            "format": "table",
-                                            "global_query_id": "",
-                                            "parser": "jq-backend",
-                                            "root_selector": ".",
-                                            "source": "url",
-                                            "type": "json",
-                                            "url": "http://host.docker.internal:8000/api/v1/portfolio?customer=${customer}&project=${project}&status=${status}&priority=${priority}&start_date=${__from:date:YYYY-MM-DD}&end_date=${__to:date:YYYY-MM-DD}",
-                                            "url_options": {
-                                                "data": "",
-                                                "method": "GET"
-                                            }
-                                        },
-                                        "version": "v0"
-                                    },
-                                    "refId": "A"
-                                }
-                            }
-                        ],
-                        "queryOptions": {},
-                        "transformations": [
-                            {
-                                "group": "organize",
-                                "kind": "Transformation",
-                                "spec": {
-                                    "options": {
-                                        "excludeByName": {
-                                            "bottlenecks": false,
-                                            "bottlenecks_text": true,
-                                            "emerging_skills": true,
-                                            "emerging_skills_text": true,
-                                            "executive_summary": true,
-                                            "overall_risk": true,
-                                            "portfolio_health": true,
-                                            "recommendations": true,
-                                            "recommendations_text": true,
-                                            "top_risks": true,
-                                            "top_risks_text": true
-                                        },
-                                        "includeByName": {},
-                                        "indexByName": {},
-                                        "renameByName": {}
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                },
-                "description": "",
-                "id": 5,
-                "links": [],
-                "title": "Bottlenecks",
-                "vizConfig": {
-                    "group": "table",
-                    "kind": "VizConfig",
-                    "spec": {
-                        "fieldConfig": {
-                            "defaults": {
-                                "color": {
-                                    "mode": "thresholds"
-                                },
-                                "custom": {
-                                    "align": "auto",
-                                    "cellOptions": {
-                                        "type": "auto"
-                                    },
-                                    "footer": {
-                                        "reducers": []
-                                    },
-                                    "inspect": false,
-                                    "wrapText": true
-                                },
-                                "thresholds": {
-                                    "mode": "absolute",
-                                    "steps": [
-                                        {
-                                            "color": "green",
-                                            "value": 0
-                                        },
-                                        {
-                                            "color": "red",
-                                            "value": 80
-                                        }
-                                    ]
-                                }
-                            },
-                            "overrides": []
-                        },
-                        "options": {
-                            "cellHeight": "sm",
-                            "showHeader": false,
-                            "sortBy": [
-                                {
-                                    "desc": true,
-                                    "displayName": "executive_summary"
-                                }
-                            ]
-                        }
-                    },
-                    "version": "13.1.1"
-                }
-            }
-        },
-        "panel-6": {
-            "kind": "Panel",
-            "spec": {
-                "data": {
-                    "kind": "QueryGroup",
-                    "spec": {
-                        "queries": [
-                            {
-                                "kind": "PanelQuery",
-                                "spec": {
-                                    "hidden": false,
-                                    "query": {
-                                        "datasource": {
-                                            "name": "bftw1n8h0ledcf"
-                                        },
-                                        "group": "yesoreyeram-infinity-datasource",
-                                        "kind": "DataQuery",
-                                        "spec": {
-                                            "columns": [
-                                                {
-                                                    "selector": "portfolio_health",
-                                                    "text": "",
-                                                    "type": "string"
-                                                }
-                                            ],
-                                            "filters": [],
-                                            "format": "table",
-                                            "global_query_id": "",
-                                            "parser": "jq-backend",
-                                            "root_selector": ".",
-                                            "source": "url",
-                                            "type": "json",
-                                            "url": "http://host.docker.internal:8000/api/v1/portfolio?customer=${customer}&project=${project}&status=${status}&priority=${priority}&start_date=${__from:date:YYYY-MM-DD}&end_date=${__to:date:YYYY-MM-DD}",
-                                            "url_options": {
-                                                "data": "",
-                                                "method": "GET"
-                                            }
-                                        },
-                                        "version": "v0"
-                                    },
-                                    "refId": "A"
-                                }
-                            }
-                        ],
-                        "queryOptions": {},
-                        "transformations": []
-                    }
-                },
-                "description": "",
-                "id": 6,
-                "links": [],
-                "title": "Portfolio Health",
-                "vizConfig": {
-                    "group": "stat",
-                    "kind": "VizConfig",
-                    "spec": {
-                        "fieldConfig": {
-                            "defaults": {
-                                "color": {
-                                    "mode": "thresholds"
-                                },
-                                "mappings": [
-                                    {
-                                        "options": {
-                                            "Green": {
-                                                "color": "green",
-                                                "index": 0,
-                                                "text": "🟢 Good"
-                                            },
-                                            "Red": {
-                                                "color": "red",
-                                                "index": 2,
-                                                "text": "🔴 Poor"
-                                            },
-                                            "Yellow": {
-                                                "color": "yellow",
-                                                "index": 1,
-                                                "text": "🟡 Fair"
-                                            }
-                                        },
-                                        "type": "value"
-                                    }
-                                ],
-                                "thresholds": {
-                                    "mode": "absolute",
-                                    "steps": [
-                                        {
-                                            "color": "green",
-                                            "value": 0
-                                        },
-                                        {
-                                            "color": "red",
-                                            "value": 80
-                                        }
-                                    ]
-                                }
-                            },
-                            "overrides": []
-                        },
-                        "options": {
-                            "colorMode": "value",
-                            "graphMode": "area",
-                            "justifyMode": "auto",
-                            "orientation": "vertical",
-                            "percentChangeColorMode": "standard",
-                            "reduceOptions": {
-                                "calcs": [
-                                    "lastNotNull"
-                                ],
-                                "fields": "/.*/",
-                                "values": false
-                            },
-                            "showPercentChange": false,
-                            "textMode": "value",
-                            "wideLayout": true
-                        }
-                    },
-                    "version": "13.1.1"
-                }
-            }
-        },
-        "panel-7": {
-            "kind": "Panel",
-            "spec": {
-                "data": {
-                    "kind": "QueryGroup",
-                    "spec": {
-                        "queries": [
-                            {
-                                "kind": "PanelQuery",
-                                "spec": {
-                                    "hidden": false,
-                                    "query": {
-                                        "datasource": {
-                                            "name": "bftw1n8h0ledcf"
-                                        },
-                                        "group": "yesoreyeram-infinity-datasource",
-                                        "kind": "DataQuery",
-                                        "spec": {
-                                            "columns": [
-                                                {
-                                                    "selector": "overall_risk",
-                                                    "text": "",
-                                                    "type": "string"
-                                                }
-                                            ],
-                                            "filters": [],
-                                            "format": "table",
-                                            "global_query_id": "",
-                                            "parser": "jq-backend",
-                                            "root_selector": ".",
-                                            "source": "url",
-                                            "type": "json",
-                                            "url": "http://host.docker.internal:8000/api/v1/portfolio?customer=${customer}&project=${project}&status=${status}&priority=${priority}&start_date=${__from:date:YYYY-MM-DD}&end_date=${__to:date:YYYY-MM-DD}",
-                                            "url_options": {
-                                                "data": "",
-                                                "method": "GET"
-                                            }
-                                        },
-                                        "version": "v0"
-                                    },
-                                    "refId": "A"
-                                }
-                            }
-                        ],
-                        "queryOptions": {},
-                        "transformations": []
-                    }
-                },
-                "description": "",
-                "id": 7,
-                "links": [],
-                "title": "Overall Risk",
-                "vizConfig": {
-                    "group": "stat",
-                    "kind": "VizConfig",
-                    "spec": {
-                        "fieldConfig": {
-                            "defaults": {
-                                "color": {
-                                    "mode": "thresholds"
-                                },
-                                "mappings": [
-                                    {
-                                        "options": {
-                                            "High": {
-                                                "color": "red",
-                                                "index": 2,
-                                                "text": "🔴 High"
-                                            },
-                                            "Low": {
-                                                "color": "green",
-                                                "index": 0,
-                                                "text": "🟢 Low"
-                                            },
-                                            "Medium": {
-                                                "color": "yellow",
-                                                "index": 1,
-                                                "text": "🟡 Medium"
-                                            }
-                                        },
-                                        "type": "value"
-                                    }
-                                ],
-                                "thresholds": {
-                                    "mode": "absolute",
-                                    "steps": [
-                                        {
-                                            "color": "green",
-                                            "value": 0
-                                        },
-                                        {
-                                            "color": "red",
-                                            "value": 80
-                                        }
-                                    ]
-                                }
-                            },
-                            "overrides": []
-                        },
-                        "options": {
-                            "colorMode": "value",
-                            "graphMode": "area",
-                            "justifyMode": "auto",
-                            "orientation": "vertical",
-                            "percentChangeColorMode": "standard",
-                            "reduceOptions": {
-                                "calcs": [
-                                    "lastNotNull"
-                                ],
-                                "fields": "/.*/",
-                                "values": false
-                            },
-                            "showPercentChange": false,
-                            "textMode": "auto",
-                            "wideLayout": true
-                        }
-                    },
-                    "version": "13.1.1"
-                }
-            }
-        },
-        "panel-8": {
-            "kind": "Panel",
-            "spec": {
-                "data": {
-                    "kind": "QueryGroup",
-                    "spec": {
-                        "queries": [
-                            {
-                                "kind": "PanelQuery",
-                                "spec": {
-                                    "hidden": false,
-                                    "query": {
-                                        "datasource": {
-                                            "name": "cftdwcsqrrdhcf"
-                                        },
-                                        "group": "grafana-postgresql-datasource",
-                                        "kind": "DataQuery",
-                                        "spec": {
-                                            "dataset": "engineering_demo",
-                                            "editorMode": "code",
-                                            "format": "table",
-                                            "rawQuery": true,
-                                            "rawSql": "SELECT COUNT(*)\nFROM vw_issue_details\nWHERE customer_name IN (${customer:sqlstring})\n  AND project_name IN (${project:sqlstring})\n  AND status IN (${status:sqlstring})\n  AND priority IN (${priority:sqlstring})\n  AND $__timeFilter(created_date);",
-                                            "sql": {
-                                                "columns": [
-                                                    {
-                                                        "parameters": [],
-                                                        "type": "function"
-                                                    }
-                                                ],
-                                                "groupBy": [
-                                                    {
-                                                        "property": {
-                                                            "type": "string"
-                                                        },
-                                                        "type": "groupBy"
-                                                    }
-                                                ],
-                                                "limit": 50
-                                            }
-                                        },
-                                        "version": "v0"
-                                    },
-                                    "refId": "A"
-                                }
-                            }
-                        ],
-                        "queryOptions": {},
-                        "transformations": []
-                    }
-                },
-                "description": "",
-                "id": 8,
-                "links": [],
-                "title": "Engineering Issues",
-                "vizConfig": {
-                    "group": "stat",
-                    "kind": "VizConfig",
-                    "spec": {
-                        "fieldConfig": {
-                            "defaults": {
-                                "color": {
-                                    "fixedColor": "light-blue",
-                                    "mode": "fixed"
-                                },
-                                "thresholds": {
-                                    "mode": "absolute",
-                                    "steps": [
-                                        {
-                                            "color": "green",
-                                            "value": 0
-                                        },
-                                        {
-                                            "color": "red",
-                                            "value": 80
-                                        }
-                                    ]
-                                }
-                            },
-                            "overrides": []
-                        },
-                        "options": {
-                            "colorMode": "value",
-                            "graphMode": "area",
-                            "justifyMode": "auto",
-                            "orientation": "auto",
-                            "percentChangeColorMode": "standard",
-                            "reduceOptions": {
-                                "calcs": [
-                                    "lastNotNull"
-                                ],
-                                "fields": "/.*/",
-                                "values": false
-                            },
-                            "showPercentChange": false,
-                            "textMode": "auto",
-                            "wideLayout": true
-                        }
-                    },
-                    "version": "13.1.1"
-                }
-            }
-        }
+      }
     },
-    "layout": {
-        "kind": "GridLayout",
-        "spec": {
-            "items": [
-                {
-                    "kind": "GridLayoutItem",
+    "panel-2": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "bftw1n8h0ledcf"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
                     "spec": {
-                        "element": {
-                            "kind": "ElementReference",
-                            "name": "panel-6"
-                        },
-                        "height": 3,
-                        "width": 5,
-                        "x": 0,
-                        "y": 0
-                    }
-                },
-                {
-                    "kind": "GridLayoutItem",
-                    "spec": {
-                        "element": {
-                            "kind": "ElementReference",
-                            "name": "panel-7"
-                        },
-                        "height": 3,
-                        "width": 5,
-                        "x": 5,
-                        "y": 0
-                    }
-                },
-                {
-                    "kind": "GridLayoutItem",
-                    "spec": {
-                        "element": {
-                            "kind": "ElementReference",
-                            "name": "panel-8"
-                        },
-                        "height": 3,
-                        "width": 5,
-                        "x": 10,
-                        "y": 0
-                    }
-                },
-                {
-                    "kind": "GridLayoutItem",
-                    "spec": {
-                        "element": {
-                            "kind": "ElementReference",
-                            "name": "panel-1"
-                        },
-                        "height": 8,
-                        "width": 24,
-                        "x": 0,
-                        "y": 3
-                    }
-                },
-                {
-                    "kind": "GridLayoutItem",
-                    "spec": {
-                        "element": {
-                            "kind": "ElementReference",
-                            "name": "panel-2"
-                        },
-                        "height": 8,
-                        "width": 12,
-                        "x": 0,
-                        "y": 11
-                    }
-                },
-                {
-                    "kind": "GridLayoutItem",
-                    "spec": {
-                        "element": {
-                            "kind": "ElementReference",
-                            "name": "panel-3"
-                        },
-                        "height": 8,
-                        "width": 12,
-                        "x": 12,
-                        "y": 11
-                    }
-                },
-                {
-                    "kind": "GridLayoutItem",
-                    "spec": {
-                        "element": {
-                            "kind": "ElementReference",
-                            "name": "panel-4"
-                        },
-                        "height": 8,
-                        "width": 12,
-                        "x": 0,
-                        "y": 19
-                    }
-                },
-                {
-                    "kind": "GridLayoutItem",
-                    "spec": {
-                        "element": {
-                            "kind": "ElementReference",
-                            "name": "panel-5"
-                        },
-                        "height": 8,
-                        "width": 12,
-                        "x": 12,
-                        "y": 19
-                    }
+                      "columns": [
+                        {
+                          "selector": "top_risks_text",
+                          "text": "Top Risks",
+                          "type": "string"
+                        }
+                      ],
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "jq-backend",
+                      "root_selector": ".",
+                      "source": "url",
+                      "type": "json",
+                      "url": "http://host.docker.internal:8000/api/v1/portfolio?customer=${customer}&project=${project}&status=${status}&priority=${priority}&start_date=${__from:date:YYYY-MM-DD}&end_date=${__to:date:YYYY-MM-DD}",
+                      "url_options": {
+                        "data": "",
+                        "method": "GET"
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
                 }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": [
+              {
+                "group": "organize",
+                "kind": "Transformation",
+                "spec": {
+                  "options": {
+                    "excludeByName": {
+                      "bottlenecks": true,
+                      "bottlenecks_text": true,
+                      "emerging_skills": true,
+                      "emerging_skills_text": true,
+                      "executive_summary": true,
+                      "overall_risk": true,
+                      "portfolio_health": true,
+                      "recommendations": true,
+                      "recommendations_text": true,
+                      "top_risks": false,
+                      "top_risks_text": true
+                    },
+                    "includeByName": {},
+                    "indexByName": {},
+                    "renameByName": {}
+                  }
+                }
+              }
             ]
-        }
-    },
-    "links": [],
-    "liveNow": false,
-    "preferences": {
-        "layout": {
-            "kind": "GridLayout",
-            "spec": {
-                "items": []
-            }
-        }
-    },
-    "preload": false,
-    "tags": [],
-    "timeSettings": {
-        "autoRefresh": "",
-        "autoRefreshIntervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-        ],
-        "fiscalYearStartMonth": 0,
-        "from": "now-90d",
-        "hideTimepicker": false,
-        "timezone": "browser",
-        "to": "now"
-    },
-    "title": "Engineering Intelligence AI",
-    "variables": [
-        {
-            "kind": "QueryVariable",
-            "spec": {
-                "allowCustomValue": false,
-                "current": {
-                    "text": [
-                        "All"
-                    ],
-                    "value": [
-                        "$__all"
-                    ]
+          }
+        },
+        "description": "",
+        "id": 2,
+        "links": [],
+        "title": "Top Risks",
+        "vizConfig": {
+          "group": "table",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
                 },
-                "definition": "SELECT DISTINCT\n    customer_name\nFROM vw_issue_details\nWHERE customer_name IS NOT NULL\nORDER BY customer_name;",
-                "hide": "dontHide",
-                "includeAll": true,
-                "label": "Customer",
-                "multi": true,
-                "name": "customer",
-                "options": [],
-                "query": {
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "footer": {
+                    "reducers": []
+                  },
+                  "inspect": false,
+                  "wrapText": true
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "options": {
+              "cellHeight": "sm",
+              "showHeader": false,
+              "sortBy": [
+                {
+                  "desc": true,
+                  "displayName": "executive_summary"
+                }
+              ]
+            }
+          },
+          "version": "13.1.1"
+        }
+      }
+    },
+    "panel-3": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
                     "datasource": {
-                        "name": "cftdwcsqrrdhcf"
+                      "name": "bftw1n8h0ledcf"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [
+                        {
+                          "selector": "recommendations_text",
+                          "text": "Recommendations",
+                          "type": "string"
+                        }
+                      ],
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "jq-backend",
+                      "root_selector": ".",
+                      "source": "url",
+                      "type": "json",
+                      "url": "http://host.docker.internal:8000/api/v1/portfolio?customer=${customer}&project=${project}&status=${status}&priority=${priority}&start_date=${__from:date:YYYY-MM-DD}&end_date=${__to:date:YYYY-MM-DD}",
+                      "url_options": {
+                        "data": "",
+                        "method": "GET"
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": [
+              {
+                "group": "organize",
+                "kind": "Transformation",
+                "spec": {
+                  "options": {
+                    "excludeByName": {
+                      "bottlenecks": true,
+                      "bottlenecks_text": true,
+                      "emerging_skills": true,
+                      "emerging_skills_text": true,
+                      "executive_summary": true,
+                      "overall_risk": true,
+                      "portfolio_health": true,
+                      "recommendations": false,
+                      "recommendations_text": true,
+                      "top_risks": true,
+                      "top_risks_text": true
+                    },
+                    "includeByName": {},
+                    "indexByName": {},
+                    "renameByName": {}
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "description": "",
+        "id": 3,
+        "links": [],
+        "title": "Recommendations",
+        "vizConfig": {
+          "group": "table",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "footer": {
+                    "reducers": []
+                  },
+                  "inspect": false,
+                  "wrapText": true
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "options": {
+              "cellHeight": "sm",
+              "showHeader": false,
+              "sortBy": [
+                {
+                  "desc": true,
+                  "displayName": "executive_summary"
+                }
+              ]
+            }
+          },
+          "version": "13.1.1"
+        }
+      }
+    },
+    "panel-4": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "bftw1n8h0ledcf"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [
+                        {
+                          "selector": "emerging_skills_text",
+                          "text": "Emerging Skills",
+                          "type": "string"
+                        }
+                      ],
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "jq-backend",
+                      "root_selector": ".",
+                      "source": "url",
+                      "type": "json",
+                      "url": "http://host.docker.internal:8000/api/v1/portfolio?customer=${customer}&project=${project}&status=${status}&priority=${priority}&start_date=${__from:date:YYYY-MM-DD}&end_date=${__to:date:YYYY-MM-DD}",
+                      "url_options": {
+                        "data": "",
+                        "method": "GET"
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": [
+              {
+                "group": "organize",
+                "kind": "Transformation",
+                "spec": {
+                  "options": {
+                    "excludeByName": {
+                      "bottlenecks": true,
+                      "bottlenecks_text": true,
+                      "emerging_skills": false,
+                      "emerging_skills_text": true,
+                      "executive_summary": true,
+                      "overall_risk": true,
+                      "portfolio_health": true,
+                      "recommendations": true,
+                      "recommendations_text": true,
+                      "top_risks": true,
+                      "top_risks_text": true
+                    },
+                    "includeByName": {},
+                    "indexByName": {},
+                    "renameByName": {}
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "description": "",
+        "id": 4,
+        "links": [],
+        "title": "Emerging Skills",
+        "vizConfig": {
+          "group": "table",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "footer": {
+                    "reducers": []
+                  },
+                  "inspect": false,
+                  "wrapText": true
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "options": {
+              "cellHeight": "sm",
+              "showHeader": false,
+              "sortBy": [
+                {
+                  "desc": true,
+                  "displayName": "executive_summary"
+                }
+              ]
+            }
+          },
+          "version": "13.1.1"
+        }
+      }
+    },
+    "panel-5": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "bftw1n8h0ledcf"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [
+                        {
+                          "selector": "bottlenecks_text",
+                          "text": "Bottlenecks",
+                          "type": "string"
+                        }
+                      ],
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "jq-backend",
+                      "root_selector": ".",
+                      "source": "url",
+                      "type": "json",
+                      "url": "http://host.docker.internal:8000/api/v1/portfolio?customer=${customer}&project=${project}&status=${status}&priority=${priority}&start_date=${__from:date:YYYY-MM-DD}&end_date=${__to:date:YYYY-MM-DD}",
+                      "url_options": {
+                        "data": "",
+                        "method": "GET"
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": [
+              {
+                "group": "organize",
+                "kind": "Transformation",
+                "spec": {
+                  "options": {
+                    "excludeByName": {
+                      "bottlenecks": false,
+                      "bottlenecks_text": true,
+                      "emerging_skills": true,
+                      "emerging_skills_text": true,
+                      "executive_summary": true,
+                      "overall_risk": true,
+                      "portfolio_health": true,
+                      "recommendations": true,
+                      "recommendations_text": true,
+                      "top_risks": true,
+                      "top_risks_text": true
+                    },
+                    "includeByName": {},
+                    "indexByName": {},
+                    "renameByName": {}
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "description": "",
+        "id": 5,
+        "links": [],
+        "title": "Bottlenecks",
+        "vizConfig": {
+          "group": "table",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "footer": {
+                    "reducers": []
+                  },
+                  "inspect": false,
+                  "wrapText": true
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "options": {
+              "cellHeight": "sm",
+              "showHeader": false,
+              "sortBy": [
+                {
+                  "desc": true,
+                  "displayName": "executive_summary"
+                }
+              ]
+            }
+          },
+          "version": "13.1.1"
+        }
+      }
+    },
+    "panel-6": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "bftw1n8h0ledcf"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [
+                        {
+                          "selector": "portfolio_health",
+                          "text": "",
+                          "type": "string"
+                        }
+                      ],
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "jq-backend",
+                      "root_selector": ".",
+                      "source": "url",
+                      "type": "json",
+                      "url": "http://host.docker.internal:8000/api/v1/portfolio?customer=${customer}&project=${project}&status=${status}&priority=${priority}&start_date=${__from:date:YYYY-MM-DD}&end_date=${__to:date:YYYY-MM-DD}",
+                      "url_options": {
+                        "data": "",
+                        "method": "GET"
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "",
+        "id": 6,
+        "links": [],
+        "title": "Portfolio Health",
+        "vizConfig": {
+          "group": "stat",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [
+                  {
+                    "options": {
+                      "Green": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "\ud83d\udfe2 Good"
+                      },
+                      "Red": {
+                        "color": "red",
+                        "index": 2,
+                        "text": "\ud83d\udd34 Poor"
+                      },
+                      "Yellow": {
+                        "color": "yellow",
+                        "index": 1,
+                        "text": "\ud83d\udfe1 Fair"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "vertical",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "/.*/",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "value",
+              "wideLayout": true
+            }
+          },
+          "version": "13.1.1"
+        }
+      }
+    },
+    "panel-7": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "bftw1n8h0ledcf"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [
+                        {
+                          "selector": "overall_risk",
+                          "text": "",
+                          "type": "string"
+                        }
+                      ],
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "jq-backend",
+                      "root_selector": ".",
+                      "source": "url",
+                      "type": "json",
+                      "url": "http://host.docker.internal:8000/api/v1/portfolio?customer=${customer}&project=${project}&status=${status}&priority=${priority}&start_date=${__from:date:YYYY-MM-DD}&end_date=${__to:date:YYYY-MM-DD}",
+                      "url_options": {
+                        "data": "",
+                        "method": "GET"
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "",
+        "id": 7,
+        "links": [],
+        "title": "Overall Risk",
+        "vizConfig": {
+          "group": "stat",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [
+                  {
+                    "options": {
+                      "High": {
+                        "color": "red",
+                        "index": 2,
+                        "text": "\ud83d\udd34 High"
+                      },
+                      "Low": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "\ud83d\udfe2 Low"
+                      },
+                      "Medium": {
+                        "color": "yellow",
+                        "index": 1,
+                        "text": "\ud83d\udfe1 Medium"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "vertical",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "/.*/",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            }
+          },
+          "version": "13.1.1"
+        }
+      }
+    },
+    "panel-8": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "cftdwcsqrrdhcf"
                     },
                     "group": "grafana-postgresql-datasource",
                     "kind": "DataQuery",
                     "spec": {
-                        "dataset": "engineering_demo",
-                        "editorMode": "code",
-                        "format": "table",
-                        "query": "SELECT DISTINCT\n    customer_name\nFROM vw_issue_details\nWHERE customer_name IS NOT NULL\nORDER BY customer_name;",
-                        "rawQuery": true,
-                        "rawSql": "SELECT DISTINCT\n    customer_name\nFROM vw_issue_details\nWHERE customer_name IS NOT NULL\nORDER BY customer_name;",
-                        "refId": "SQLVariableQueryEditor-VariableQuery",
-                        "sql": {
-                            "columns": [
-                                {
-                                    "parameters": [],
-                                    "type": "function"
-                                }
-                            ],
-                            "groupBy": [
-                                {
-                                    "property": {
-                                        "type": "string"
-                                    },
-                                    "type": "groupBy"
-                                }
-                            ],
-                            "limit": 50
-                        }
+                      "dataset": "engineering_demo",
+                      "editorMode": "code",
+                      "format": "table",
+                      "rawQuery": true,
+                      "rawSql": "SELECT COUNT(*)\nFROM vw_issue_details\nWHERE customer_name IN (${customer:sqlstring})\n  AND project_name IN (${project:sqlstring})\n  AND status IN (${status:sqlstring})\n  AND priority IN (${priority:sqlstring})\n  AND $__timeFilter(created_date);",
+                      "sql": {
+                        "columns": [
+                          {
+                            "parameters": [],
+                            "type": "function"
+                          }
+                        ],
+                        "groupBy": [
+                          {
+                            "property": {
+                              "type": "string"
+                            },
+                            "type": "groupBy"
+                          }
+                        ],
+                        "limit": 50
+                      }
                     },
                     "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "",
+        "id": 8,
+        "links": [],
+        "title": "Engineering Issues",
+        "vizConfig": {
+          "group": "stat",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "fixedColor": "light-blue",
+                  "mode": "fixed"
                 },
-                "refresh": "onDashboardLoad",
-                "regex": "",
-                "regexApplyTo": "value",
-                "skipUrlSync": false,
-                "sort": "disabled"
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "/.*/",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
             }
+          },
+          "version": "13.1.1"
+        }
+      }
+    },
+    "panel-analyst": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Interactive AI analysis of the currently filtered issues. Choose a preconfigured analysis or ask your own question.",
+        "id": 9,
+        "links": [],
+        "title": "AI Analyst",
+        "vizConfig": {
+          "group": "text",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "options": {
+              "mode": "html",
+              "content": "<iframe src=\"http://localhost:8000/panel?customer=${customer}&project=${project}&status=${status}&priority=${priority}&start_date=${__from:date:YYYY-MM-DD}&end_date=${__to:date:YYYY-MM-DD}\" style=\"position:absolute;inset:0;width:100%;height:100%;border:none;\"></iframe>",
+              "code": {
+                "language": "html",
+                "showLineNumbers": false,
+                "showMiniMap": false
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "layout": {
+    "kind": "GridLayout",
+    "spec": {
+      "items": [
+        {
+          "kind": "GridLayoutItem",
+          "spec": {
+            "element": {
+              "kind": "ElementReference",
+              "name": "panel-6"
+            },
+            "height": 3,
+            "width": 5,
+            "x": 0,
+            "y": 0
+          }
         },
         {
-            "kind": "QueryVariable",
-            "spec": {
-                "allowCustomValue": false,
-                "current": {
-                    "text": [
-                        "All"
-                    ],
-                    "value": [
-                        "$__all"
-                    ]
-                },
-                "definition": "SELECT DISTINCT\n    project_name\nFROM vw_issue_details\nWHERE customer_name IN (${customer:sqlstring})\nORDER BY project_name;",
-                "hide": "dontHide",
-                "includeAll": true,
-                "label": "Project",
-                "multi": true,
-                "name": "project",
-                "options": [],
-                "query": {
-                    "datasource": {
-                        "name": "cftdwcsqrrdhcf"
-                    },
-                    "group": "grafana-postgresql-datasource",
-                    "kind": "DataQuery",
-                    "spec": {
-                        "dataset": "engineering_demo",
-                        "editorMode": "code",
-                        "format": "table",
-                        "query": "SELECT DISTINCT\n    project_name\nFROM vw_issue_details\nWHERE customer_name IN (${customer:sqlstring})\nORDER BY project_name;",
-                        "rawQuery": true,
-                        "rawSql": "SELECT DISTINCT\n    project_name\nFROM vw_issue_details\nWHERE customer_name IN (${customer:sqlstring})\nORDER BY project_name;",
-                        "refId": "SQLVariableQueryEditor-VariableQuery",
-                        "sql": {
-                            "columns": [
-                                {
-                                    "parameters": [],
-                                    "type": "function"
-                                }
-                            ],
-                            "groupBy": [
-                                {
-                                    "property": {
-                                        "type": "string"
-                                    },
-                                    "type": "groupBy"
-                                }
-                            ],
-                            "limit": 50
-                        }
-                    },
-                    "version": "v0"
-                },
-                "refresh": "onDashboardLoad",
-                "regex": "",
-                "regexApplyTo": "value",
-                "skipUrlSync": false,
-                "sort": "disabled"
-            }
+          "kind": "GridLayoutItem",
+          "spec": {
+            "element": {
+              "kind": "ElementReference",
+              "name": "panel-7"
+            },
+            "height": 3,
+            "width": 5,
+            "x": 5,
+            "y": 0
+          }
         },
         {
-            "kind": "QueryVariable",
-            "spec": {
-                "allowCustomValue": false,
-                "current": {
-                    "text": [
-                        "All"
-                    ],
-                    "value": [
-                        "$__all"
-                    ]
-                },
-                "definition": "SELECT DISTINCT\n    status\nFROM vw_issue_details\nWHERE status IS NOT NULL\nORDER BY status;",
-                "hide": "dontHide",
-                "includeAll": true,
-                "label": "Status",
-                "multi": true,
-                "name": "status",
-                "options": [],
-                "query": {
-                    "datasource": {
-                        "name": "cftdwcsqrrdhcf"
-                    },
-                    "group": "grafana-postgresql-datasource",
-                    "kind": "DataQuery",
-                    "spec": {
-                        "dataset": "engineering_demo",
-                        "editorMode": "code",
-                        "format": "table",
-                        "query": "SELECT DISTINCT\n    status\nFROM vw_issue_details\nWHERE status IS NOT NULL\nORDER BY status;",
-                        "rawQuery": true,
-                        "rawSql": "SELECT DISTINCT\n    status\nFROM vw_issue_details\nWHERE status IS NOT NULL\nORDER BY status;",
-                        "refId": "SQLVariableQueryEditor-VariableQuery",
-                        "sql": {
-                            "columns": [
-                                {
-                                    "parameters": [],
-                                    "type": "function"
-                                }
-                            ],
-                            "groupBy": [
-                                {
-                                    "property": {
-                                        "type": "string"
-                                    },
-                                    "type": "groupBy"
-                                }
-                            ],
-                            "limit": 50
-                        }
-                    },
-                    "version": "v0"
-                },
-                "refresh": "onDashboardLoad",
-                "regex": "",
-                "regexApplyTo": "value",
-                "skipUrlSync": false,
-                "sort": "disabled"
-            }
+          "kind": "GridLayoutItem",
+          "spec": {
+            "element": {
+              "kind": "ElementReference",
+              "name": "panel-8"
+            },
+            "height": 3,
+            "width": 5,
+            "x": 10,
+            "y": 0
+          }
         },
         {
-            "kind": "QueryVariable",
-            "spec": {
-                "allowCustomValue": false,
-                "current": {
-                    "text": [
-                        "All"
-                    ],
-                    "value": [
-                        "$__all"
-                    ]
-                },
-                "definition": "SELECT DISTINCT\n    priority\nFROM vw_issue_details\nWHERE priority IS NOT NULL\nORDER BY priority;",
-                "hide": "dontHide",
-                "includeAll": true,
-                "label": "Priority",
-                "multi": true,
-                "name": "priority",
-                "options": [],
-                "query": {
-                    "datasource": {
-                        "name": "cftdwcsqrrdhcf"
-                    },
-                    "group": "grafana-postgresql-datasource",
-                    "kind": "DataQuery",
-                    "spec": {
-                        "dataset": "engineering_demo",
-                        "editorMode": "code",
-                        "format": "table",
-                        "query": "SELECT DISTINCT\n    priority\nFROM vw_issue_details\nWHERE priority IS NOT NULL\nORDER BY priority;",
-                        "rawQuery": true,
-                        "rawSql": "SELECT DISTINCT\n    priority\nFROM vw_issue_details\nWHERE priority IS NOT NULL\nORDER BY priority;",
-                        "refId": "SQLVariableQueryEditor-VariableQuery",
-                        "sql": {
-                            "columns": [
-                                {
-                                    "parameters": [],
-                                    "type": "function"
-                                }
-                            ],
-                            "groupBy": [
-                                {
-                                    "property": {
-                                        "type": "string"
-                                    },
-                                    "type": "groupBy"
-                                }
-                            ],
-                            "limit": 50
-                        }
-                    },
-                    "version": "v0"
-                },
-                "refresh": "onDashboardLoad",
-                "regex": "",
-                "regexApplyTo": "value",
-                "skipUrlSync": false,
-                "sort": "disabled"
-            }
+          "kind": "GridLayoutItem",
+          "spec": {
+            "element": {
+              "kind": "ElementReference",
+              "name": "panel-1"
+            },
+            "height": 8,
+            "width": 24,
+            "x": 0,
+            "y": 3
+          }
+        },
+        {
+          "kind": "GridLayoutItem",
+          "spec": {
+            "element": {
+              "kind": "ElementReference",
+              "name": "panel-2"
+            },
+            "height": 8,
+            "width": 12,
+            "x": 0,
+            "y": 11
+          }
+        },
+        {
+          "kind": "GridLayoutItem",
+          "spec": {
+            "element": {
+              "kind": "ElementReference",
+              "name": "panel-3"
+            },
+            "height": 8,
+            "width": 12,
+            "x": 12,
+            "y": 11
+          }
+        },
+        {
+          "kind": "GridLayoutItem",
+          "spec": {
+            "element": {
+              "kind": "ElementReference",
+              "name": "panel-4"
+            },
+            "height": 8,
+            "width": 12,
+            "x": 0,
+            "y": 19
+          }
+        },
+        {
+          "kind": "GridLayoutItem",
+          "spec": {
+            "element": {
+              "kind": "ElementReference",
+              "name": "panel-5"
+            },
+            "height": 8,
+            "width": 12,
+            "x": 12,
+            "y": 19
+          }
+        },
+        {
+          "kind": "GridLayoutItem",
+          "spec": {
+            "element": {
+              "kind": "ElementReference",
+              "name": "panel-analyst"
+            },
+            "height": 14,
+            "width": 24,
+            "x": 0,
+            "y": 27
+          }
         }
-    ]
+      ]
+    }
+  },
+  "links": [],
+  "liveNow": false,
+  "preferences": {
+    "layout": {
+      "kind": "GridLayout",
+      "spec": {
+        "items": []
+      }
+    }
+  },
+  "preload": false,
+  "tags": [],
+  "timeSettings": {
+    "autoRefresh": "",
+    "autoRefreshIntervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ],
+    "fiscalYearStartMonth": 0,
+    "from": "now-90d",
+    "hideTimepicker": false,
+    "timezone": "browser",
+    "to": "now"
+  },
+  "title": "Engineering Intelligence AI",
+  "variables": [
+    {
+      "kind": "QueryVariable",
+      "spec": {
+        "allowCustomValue": false,
+        "current": {
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "definition": "SELECT DISTINCT\n    customer_name\nFROM vw_issue_details\nWHERE customer_name IS NOT NULL\nORDER BY customer_name;",
+        "hide": "dontHide",
+        "includeAll": true,
+        "label": "Customer",
+        "multi": true,
+        "name": "customer",
+        "options": [],
+        "query": {
+          "datasource": {
+            "name": "cftdwcsqrrdhcf"
+          },
+          "group": "grafana-postgresql-datasource",
+          "kind": "DataQuery",
+          "spec": {
+            "dataset": "engineering_demo",
+            "editorMode": "code",
+            "format": "table",
+            "query": "SELECT DISTINCT\n    customer_name\nFROM vw_issue_details\nWHERE customer_name IS NOT NULL\nORDER BY customer_name;",
+            "rawQuery": true,
+            "rawSql": "SELECT DISTINCT\n    customer_name\nFROM vw_issue_details\nWHERE customer_name IS NOT NULL\nORDER BY customer_name;",
+            "refId": "SQLVariableQueryEditor-VariableQuery",
+            "sql": {
+              "columns": [
+                {
+                  "parameters": [],
+                  "type": "function"
+                }
+              ],
+              "groupBy": [
+                {
+                  "property": {
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "limit": 50
+            }
+          },
+          "version": "v0"
+        },
+        "refresh": "onDashboardLoad",
+        "regex": "",
+        "regexApplyTo": "value",
+        "skipUrlSync": false,
+        "sort": "disabled"
+      }
+    },
+    {
+      "kind": "QueryVariable",
+      "spec": {
+        "allowCustomValue": false,
+        "current": {
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "definition": "SELECT DISTINCT\n    project_name\nFROM vw_issue_details\nWHERE customer_name IN (${customer:sqlstring})\nORDER BY project_name;",
+        "hide": "dontHide",
+        "includeAll": true,
+        "label": "Project",
+        "multi": true,
+        "name": "project",
+        "options": [],
+        "query": {
+          "datasource": {
+            "name": "cftdwcsqrrdhcf"
+          },
+          "group": "grafana-postgresql-datasource",
+          "kind": "DataQuery",
+          "spec": {
+            "dataset": "engineering_demo",
+            "editorMode": "code",
+            "format": "table",
+            "query": "SELECT DISTINCT\n    project_name\nFROM vw_issue_details\nWHERE customer_name IN (${customer:sqlstring})\nORDER BY project_name;",
+            "rawQuery": true,
+            "rawSql": "SELECT DISTINCT\n    project_name\nFROM vw_issue_details\nWHERE customer_name IN (${customer:sqlstring})\nORDER BY project_name;",
+            "refId": "SQLVariableQueryEditor-VariableQuery",
+            "sql": {
+              "columns": [
+                {
+                  "parameters": [],
+                  "type": "function"
+                }
+              ],
+              "groupBy": [
+                {
+                  "property": {
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "limit": 50
+            }
+          },
+          "version": "v0"
+        },
+        "refresh": "onDashboardLoad",
+        "regex": "",
+        "regexApplyTo": "value",
+        "skipUrlSync": false,
+        "sort": "disabled"
+      }
+    },
+    {
+      "kind": "QueryVariable",
+      "spec": {
+        "allowCustomValue": false,
+        "current": {
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "definition": "SELECT DISTINCT\n    status\nFROM vw_issue_details\nWHERE status IS NOT NULL\nORDER BY status;",
+        "hide": "dontHide",
+        "includeAll": true,
+        "label": "Status",
+        "multi": true,
+        "name": "status",
+        "options": [],
+        "query": {
+          "datasource": {
+            "name": "cftdwcsqrrdhcf"
+          },
+          "group": "grafana-postgresql-datasource",
+          "kind": "DataQuery",
+          "spec": {
+            "dataset": "engineering_demo",
+            "editorMode": "code",
+            "format": "table",
+            "query": "SELECT DISTINCT\n    status\nFROM vw_issue_details\nWHERE status IS NOT NULL\nORDER BY status;",
+            "rawQuery": true,
+            "rawSql": "SELECT DISTINCT\n    status\nFROM vw_issue_details\nWHERE status IS NOT NULL\nORDER BY status;",
+            "refId": "SQLVariableQueryEditor-VariableQuery",
+            "sql": {
+              "columns": [
+                {
+                  "parameters": [],
+                  "type": "function"
+                }
+              ],
+              "groupBy": [
+                {
+                  "property": {
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "limit": 50
+            }
+          },
+          "version": "v0"
+        },
+        "refresh": "onDashboardLoad",
+        "regex": "",
+        "regexApplyTo": "value",
+        "skipUrlSync": false,
+        "sort": "disabled"
+      }
+    },
+    {
+      "kind": "QueryVariable",
+      "spec": {
+        "allowCustomValue": false,
+        "current": {
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "definition": "SELECT DISTINCT\n    priority\nFROM vw_issue_details\nWHERE priority IS NOT NULL\nORDER BY priority;",
+        "hide": "dontHide",
+        "includeAll": true,
+        "label": "Priority",
+        "multi": true,
+        "name": "priority",
+        "options": [],
+        "query": {
+          "datasource": {
+            "name": "cftdwcsqrrdhcf"
+          },
+          "group": "grafana-postgresql-datasource",
+          "kind": "DataQuery",
+          "spec": {
+            "dataset": "engineering_demo",
+            "editorMode": "code",
+            "format": "table",
+            "query": "SELECT DISTINCT\n    priority\nFROM vw_issue_details\nWHERE priority IS NOT NULL\nORDER BY priority;",
+            "rawQuery": true,
+            "rawSql": "SELECT DISTINCT\n    priority\nFROM vw_issue_details\nWHERE priority IS NOT NULL\nORDER BY priority;",
+            "refId": "SQLVariableQueryEditor-VariableQuery",
+            "sql": {
+              "columns": [
+                {
+                  "parameters": [],
+                  "type": "function"
+                }
+              ],
+              "groupBy": [
+                {
+                  "property": {
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "limit": 50
+            }
+          },
+          "version": "v0"
+        },
+        "refresh": "onDashboardLoad",
+        "regex": "",
+        "regexApplyTo": "value",
+        "skipUrlSync": false,
+        "sort": "disabled"
+      }
+    }
+  ]
 }

@@ -33,7 +33,7 @@ SELECT
     COUNT(DISTINCT isk.skill_id)  AS skill_count,
     COUNT(DISTINCT ith.theme_id)  AS theme_count,
 
-    'https://github.com/mckinney-tim/engineering-intelligence-platform/issues/15/' AS issue_url
+    i.external_url AS issue_url
 
 FROM issues i
 
