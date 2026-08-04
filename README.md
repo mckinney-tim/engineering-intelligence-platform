@@ -296,6 +296,12 @@ answers that cite issue keys.
 
 ---
 
+### Customer Insights
+
+![Customer Insights](docs/images/customer-insights.png)
+
+---
+
 ### Executive Engineering Intelligence
 
 ![Executive Dashboard](docs/images/engineering-intelligence-ai.png)
