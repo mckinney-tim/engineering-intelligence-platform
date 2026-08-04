@@ -318,9 +318,3 @@ answers that cite issue keys.
 - Sprint analytics
 - Executive PDF generation
 - RAG-powered engineering assistant
-
----
-
-## License
-
-MIT
