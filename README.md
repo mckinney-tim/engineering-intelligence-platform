@@ -4,6 +4,16 @@ An AI-powered engineering analytics platform that combines engineering work item
 
 ---
 
+## Demo
+
+[![Watch the demo](https://img.youtube.com/vi/wu1lHOhkkss/maxresdefault.jpg)](https://youtu.be/wu1lHOhkkss)
+
+Watch the full walkthrough: **[youtu.be/wu1lHOhkkss](https://youtu.be/wu1lHOhkkss)**
+
+The demo covers the GitHub Issues sync, the enrichment pipeline running end-to-end, a tour of the Grafana dashboards, and the AI Analyst answering live questions against the engineering backlog.
+
+---
+
 ## Overview
 
 Engineering Intelligence Platform transforms raw engineering work into actionable insights.
