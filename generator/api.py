@@ -26,6 +26,7 @@ from generator.db import (
 )
 
 PANEL_HTML = (Path(__file__).parent / "static" / "analyst.html").read_text()
+ARCHITECTURE_HTML = (Path(__file__).parent / "static" / "architecture.html").read_text()
 
 app = FastAPI(title="Engineering Intelligence API")
 
@@ -161,6 +162,11 @@ def root():
 @app.get("/panel")
 def panel():
     return HTMLResponse(PANEL_HTML)
+
+
+@app.get("/architecture")
+def architecture():
+    return HTMLResponse(ARCHITECTURE_HTML)
 
 
 @app.get("/api/v1/analyses")

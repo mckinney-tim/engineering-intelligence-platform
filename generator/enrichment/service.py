@@ -10,6 +10,7 @@ from generator.db import (
 )
 
 from generator.enrichment.skills import enrich as enrich_skills
+from generator.enrichment.themes import enrich as enrich_themes
 
 
 def enrich(conn, issue_id):
@@ -21,6 +22,14 @@ def enrich(conn, issue_id):
     # Skill enrichment
     #
     enrich_skills(
+        conn,
+        issue_id,
+    )
+
+    #
+    # Theme enrichment
+    #
+    enrich_themes(
         conn,
         issue_id,
     )

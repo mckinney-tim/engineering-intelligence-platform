@@ -7,7 +7,7 @@ dashboard filters have selected, streamed back as markdown.
 """
 
 from generator.ai.client import stream_complete
-from generator.ai.portfolio import _serialize_issue
+from generator.ai.portfolio import _select_issues_for_prompt, _serialize_issue
 
 SYSTEM_PROMPT = """
 You are a senior director of engineering acting as an analyst for
@@ -94,15 +94,28 @@ ANALYSES = {
 
 def build_user_prompt(question: str, issues) -> str:
 
+    selected, omitted = _select_issues_for_prompt(issues)
+
     issue_block = "\n\n----------------------\n\n".join(
-        _serialize_issue(issue) for issue in issues
+        _serialize_issue(issue) for issue in selected
     )
 
-    return (
+    prompt = (
         f"Question:\n{question}\n\n"
         f"Engineering issues in the current filter "
         f"({len(issues)} total):\n\n{issue_block}"
     )
+
+    if omitted:
+        prompt += (
+            f"\n\n----------------------\n\n"
+            f"Note: {omitted} additional lower-weight, older issues matched "
+            f"the filters but are omitted here for length. Base your answer "
+            f"on the {len(selected)} issues above; do not imply full "
+            f"coverage of all {len(issues)} matching issues."
+        )
+
+    return prompt
 
 
 def stream_analysis(question: str, issues):

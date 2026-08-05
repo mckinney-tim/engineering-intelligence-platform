@@ -1006,7 +1006,7 @@
                       "editorMode": "code",
                       "format": "table",
                       "rawQuery": true,
-                      "rawSql": "SELECT\n    issue_key      AS \"Issue\",\n    title          AS \"Title\",\n    customer_name  AS \"Customer\",\n    project_name   AS \"Project\",\n    assignee       AS \"Assignee\",\n    team_name      AS \"Team\",\n    status         AS \"Status\",\n    priority       AS \"Priority\",\n    severity       AS \"Severity\",\n    weight         AS \"Weight\",\n    complexity     AS \"Complexity\", \n    risk           AS \"Risk\",\n    executive_summary AS \"Executive Summary\",\n    TO_CHAR(created_date, 'YYYY-MM-DD') AS \"Created\",\n    COALESCE(TO_CHAR(closed_date, 'YYYY-MM-DD'), '-') AS \"Closed\"\nFROM vw_issue_details\nWHERE customer_name IN (${customer:sqlstring})\n  AND project_name  IN (${project:sqlstring})\n  AND status        IN (${status:sqlstring})\n  AND $__timeFilter(created_date)\n  AND (\n    priority IN (${priority:sqlstring})\n    OR priority IS NULL\n)\nORDER BY\n    created_date DESC,\n    issue_key;",
+                      "rawSql": "SELECT\n    issue_key      AS \"Issue\",\n    title          AS \"Title\",\n    customer_name  AS \"Customer\",\n    project_name   AS \"Project\",\n    assignee       AS \"Assignee\",\n    team_name      AS \"Team\",\n    status         AS \"Status\",\n    priority       AS \"Priority\",\n    severity       AS \"Severity\",\n    weight         AS \"Weight\",\n    complexity     AS \"Complexity\", \n    risk           AS \"Risk\",\n    executive_summary AS \"Executive Summary\",\n    TO_CHAR(created_date, 'YYYY-MM-DD') AS \"Created\",\n    COALESCE(TO_CHAR(closed_date, 'YYYY-MM-DD'), '-') AS \"Closed\",\n    external_url\nFROM vw_issue_details\nWHERE customer_name IN (${customer:sqlstring})\n  AND project_name  IN (${project:sqlstring})\n  AND status        IN (${status:sqlstring})\n  AND $__timeFilter(created_date)\n  AND (\n    priority IN (${priority:sqlstring})\n    OR priority IS NULL\n)\nORDER BY\n    created_date DESC,\n    issue_key;",
                       "sql": {
                         "columns": [
                           {
@@ -1231,6 +1231,25 @@
                     {
                       "id": "custom.width",
                       "value": 121
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Issue",
+                    "scope": "series"
+                  },
+                  "properties": [
+                    {
+                      "id": "links",
+                      "value": [
+                        {
+                          "targetBlank": true,
+                          "title": "Open in GitHub",
+                          "url": "${__data.fields.external_url}"
+                        }
+                      ]
                     }
                   ]
                 }

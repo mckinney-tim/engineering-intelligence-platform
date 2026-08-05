@@ -10,7 +10,32 @@ from generator.ai.client import complete
 from generator.ai.portfolio_models import PortfolioAnalysis
 
 
-MAX_DESCRIPTION_CHARS = 400
+MAX_DESCRIPTION_CHARS = 220
+
+#
+# Above this many issues, a single prompt risks exceeding the OpenAI
+# org's tokens-per-minute limit. Beyond the cap, keep the
+# highest-weight, most-recent issues (most analytically relevant) and
+# tell the model how many were omitted so it doesn't overstate
+# coverage.
+#
+MAX_ISSUES_FOR_PROMPT = 150
+
+
+def _select_issues_for_prompt(issues):
+
+    if len(issues) <= MAX_ISSUES_FOR_PROMPT:
+        return issues, 0
+
+    ranked = sorted(
+        issues,
+        key=lambda i: (i.weight or 0, i.created_date or date.min),
+        reverse=True,
+    )
+
+    selected = ranked[:MAX_ISSUES_FOR_PROMPT]
+
+    return selected, len(issues) - len(selected)
 
 
 def _serialize_issue(issue) -> str:
@@ -63,6 +88,48 @@ def _serialize_issue(issue) -> str:
     lines.append(f"Description:\n{description}")
 
     return "\n".join(lines)
+
+
+def _compute_health_metrics(issues):
+    """
+    Pre-compute the exact proportions the health/risk thresholds key
+    off of. LLMs are unreliable at accurately tallying percentages by
+    eyeballing a list of issue blocks, even when given explicit
+    thresholds — so the real numbers are computed here and handed to
+    the model as facts, leaving it only to apply a rule rather than
+    first calculate one.
+    """
+
+    total = len(issues)
+
+    high_crit = sum(1 for i in issues if i.priority in ("Critical", "High"))
+
+    risk_rated = [i for i in issues if i.risk]
+    high_risk = sum(1 for i in risk_rated if i.risk == "High")
+
+    open_issues = [i for i in issues if not i.closed_date]
+
+    #
+    # Denominator is TOTAL issues, not open issues. A customer with
+    # only a handful of open issues can otherwise show a wildly noisy
+    # percentage from 2-3 stragglers even when the portfolio overall
+    # is healthy (most work already closed).
+    #
+    aging_45plus = sum(
+        1
+        for i in open_issues
+        if i.created_date and (date.today() - i.created_date).days > 45
+    )
+
+    return {
+        "total": total,
+        "pct_high_crit": round(100 * high_crit / total, 1),
+        "pct_ai_risk_high": (
+            round(100 * high_risk / len(risk_rated), 1) if risk_rated else None
+        ),
+        "pct_open": round(100 * len(open_issues) / total, 1),
+        "pct_aging_45plus_of_total": round(100 * aging_45plus / total, 1),
+    }
 
 
 def analyze_portfolio(issues) -> PortfolioAnalysis:
@@ -120,8 +187,22 @@ Rules:
     Finish with 3–5 bullet points highlighting the most important findings.
 
 Do not use tables.
-- portfolio_health should be Green, Yellow, or Red.
-- overall_risk should be Low, Medium, or High.
+- portfolio_health should be Green, Yellow, or Red. The user prompt includes
+    a "COMPUTED METRICS" block with the real percentages already calculated
+    for you — use those exact numbers, do not re-estimate them yourself from
+    the issue list. Apply these thresholds mechanically:
+    Red: pct_high_crit > 50, OR pct_ai_risk_high > 35, OR
+      pct_aging_45plus_of_total > 25.
+    Green: pct_high_crit < 20 AND (pct_ai_risk_high is None or < 15) AND
+      pct_aging_45plus_of_total < 10.
+    Yellow: everything else. Do not default here out of caution — only use
+      Yellow when the computed metrics genuinely fall in between, not as a
+      safe middle choice when Red's conditions are already met.
+- overall_risk should be Low, Medium, or High, using the same COMPUTED
+    METRICS and the same discipline: if portfolio_health is Red, overall_risk
+    should virtually always be High, not Medium. If Green, overall_risk
+    should virtually always be Low. Don't hedge toward Medium when the
+    numbers already crossed a threshold.
 - top_risks should contain 3-5 executive-level observations.
 - Each item should be a complete sentence of 10-20 words.
 - recommendations should contain 3-5 specific, actionable recommendations written as complete sentences.
@@ -136,9 +217,35 @@ Do not fabricate information that is not supported by the supplied engineering i
 Base all conclusions on the supplied issues.
 """.strip()
 
-    user_prompt = "\n\n----------------------\n\n".join(
-        _serialize_issue(issue) for issue in issues
+    selected, omitted = _select_issues_for_prompt(issues)
+
+    metrics = _compute_health_metrics(issues)
+
+    metrics_block = (
+        "COMPUTED METRICS (already calculated — use these exact numbers for "
+        "portfolio_health and overall_risk, do not re-estimate):\n"
+        f"- total issues: {metrics['total']}\n"
+        f"- pct_high_crit (Critical or High priority): {metrics['pct_high_crit']}%\n"
+        f"- pct_ai_risk_high (AI Risk = High, among issues with an AI risk "
+        f"rating): "
+        f"{metrics['pct_ai_risk_high']}%\n"
+        f"- pct_open (still open): {metrics['pct_open']}%\n"
+        f"- pct_aging_45plus_of_total (open issues older than 45 days, as a "
+        f"share of ALL issues in this set): {metrics['pct_aging_45plus_of_total']}%"
     )
+
+    user_prompt = metrics_block + "\n\n----------------------\n\n" + "\n\n----------------------\n\n".join(
+        _serialize_issue(issue) for issue in selected
+    )
+
+    if omitted:
+        user_prompt += (
+            f"\n\n----------------------\n\n"
+            f"Note: {omitted} additional lower-weight, older issues matched "
+            f"the filters but are omitted here for length. Base conclusions "
+            f"on the {len(selected)} issues above; do not imply full coverage "
+            f"of all {len(issues)} matching issues."
+        )
 
     response = complete(
         system_prompt=system_prompt,
