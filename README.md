@@ -1,5 +1,7 @@
 # Engineering Intelligence Platform
 
+> **Note:** This is a self-directed demo built entirely on synthetic, AI-generated engineering data. No real employer, customer, or personnel data is used anywhere in this repository.
+
 An AI-powered engineering analytics platform that combines engineering work items from multiple sources, derives engineering intelligence using OpenAI, and presents executive dashboards in Grafana.
 
 ---
